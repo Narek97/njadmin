@@ -1,0 +1,24 @@
+.admin-table{
+  padding: 20px;
+
+  &--filters{
+    margin-top: 40px;
+  }
+
+
+  &--actions{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    &--left-button,&--right-button{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  }
+}

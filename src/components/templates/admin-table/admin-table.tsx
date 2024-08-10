@@ -112,6 +112,7 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
           <CreateUpdateModalContent
             createUpdateRow={{ ...createUpdateRow, formInitialData }}
             createUpdateModalType={createUpdateModalType}
+            onHandleToggleCreateUpdateModalModal={onHandleToggleCreateUpdateModalModal}
           />
         </CustomModal>
       )}

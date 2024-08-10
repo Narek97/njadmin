@@ -1,8 +1,8 @@
 // Validation function to check for unique names
-import { AdminTableFilterInputType } from '@/utils/ts/types/admin-table.types';
+import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 
 export const validateUniqueFilterInputNames = (
-  filterInputs: Array<AdminTableFilterInputType>,
+  filterInputs: Array<AdminTableInputType>,
 ): boolean => {
   const names = filterInputs.map(input => input.name);
   const uniqueNames = new Set(names);

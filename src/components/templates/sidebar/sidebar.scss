@@ -1,0 +1,122 @@
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/mixins';
+
+.sidebar {
+  position: relative;
+  min-width: 60px;
+  max-width: 60px;
+  border-right: 1px solid $HEADER_BG_COLOR;
+  transition: 0.3s;
+
+  &--list {
+    overflow: hidden;
+    padding: 10px;
+  }
+
+  &--user-list {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid;
+  }
+
+  &--user-avatar-block {
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border: 1px solid;
+    border-radius: 50px;
+    overflow: hidden;
+  }
+
+  &--user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  &--user-avatar-info {
+    display: flex;
+    gap: 10px;
+  }
+
+  &--menu-list {
+    &--first-block {
+      @include flex-center-between;
+      gap: 20px;
+      line-height: 20px;
+      padding: 4px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+      cursor: pointer;
+      &:hover {
+        background-color: #545e6b;
+      }
+    }
+    &--second-block {
+      padding: 20px;
+    }
+  }
+
+  &--menu-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--menu-add-button,
+  &--menu-sub-menu-button {
+    @include flex-center-center;
+    min-width: 14px;
+    min-height: 14px;
+    max-width: 14px;
+    max-height: 14px;
+    border: 1px solid;
+    border-radius: 50px;
+    background-color: white;
+  }
+
+  &--menu-empty-button{
+    min-width: 14px;
+    min-height: 14px;
+    max-width: 14px;
+    max-height: 14px;
+  }
+
+  &--menu-title {
+    flex: 1;
+    @include reduce-text(100%);
+  }
+
+  &--open-close-button {
+    @include flex-center-center;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    background-color: red;
+    top: 50px;
+    right: -15px;
+  }
+
+  &--open-sub-menu {
+    max-height: 200px;
+    overflow: auto;
+    transition: 0.3s;
+  }
+
+  &--close-sub-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s;
+  }
+}
+
+.sidebar--open-menu {
+  min-width: 200px;
+  transition: 0.3s;
+  .menu-panel-layout--menu--open-close-button {
+    transform: rotate(-180deg);
+  }
+}

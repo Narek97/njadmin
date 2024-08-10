@@ -14,3 +14,9 @@ export type MenuPanelType = {
   addButton?: boolean;
   subMenu?: Array<MenuPanelType>;
 };
+
+export type UserType = {
+  avatar: string;
+  name: string;
+  surName: string;
+};

@@ -14,14 +14,15 @@ interface ICreateUpdateModalContent {
     updateUrl: string;
   };
   createUpdateModalType: CRUDEnum;
+  onHandleToggleCreateUpdateModalModal: () => void;
 }
 
 const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
   createUpdateRow,
   createUpdateModalType,
+  onHandleToggleCreateUpdateModalModal,
 }) => {
   const { formInitialData, formInputs, createUrl, updateUrl } = createUpdateRow;
-  console.log(formInitialData, 'formInitialData');
 
   const {
     register,
@@ -31,13 +32,18 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     defaultValues: formInitialData,
   });
 
+  console.log(errors, 'errors');
+
   const onHandleSubmit = (formData: typeof formInitialData) => {
     if (createUpdateModalType === CRUDEnum.Create) {
       console.log(createUrl, 'createUrl');
     } else {
       console.log(updateUrl, 'updateUrl');
     }
+    console.log(formData, ';formData');
+    onHandleToggleCreateUpdateModalModal();
   };
+
   return (
     <div className={'create-update-modal-content'}>
       <form

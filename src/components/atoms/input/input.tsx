@@ -1,6 +1,6 @@
 'use client';
 import { TextField, TextFieldProps } from '@mui/material';
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
@@ -36,4 +36,4 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   );
 };
 
-export default memo(CustomInput);
+export default CustomInput;

@@ -2,35 +2,10 @@
 @import 'src/assets/styles/mixins';
 
 .menu-panel-layout {
-  display: flex;
-  height: 100dvh;
 
-
-  &--menu {
-    position: relative;
-    min-width: 40px;
-    border-right: 1px solid $HEADER_BG_COLOR;
-    transition: .3s;
-
-    &--open-close-button{
-      @include flex-center-center;
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      border-radius: 50px;
-      background-color: red;
-      top: 50px;
-      right: -15px;
-    }
-  }
-
-  &--open-menu{
-    min-width: 200px;
-    transition: .3s;
-    .menu-panel-layout--menu--open-close-button{
-      transform: rotate(-180deg);
-
-    }
+  &--content {
+    display: flex;
+    height: 100dvh;
   }
 
   &--children {

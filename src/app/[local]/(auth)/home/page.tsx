@@ -3,9 +3,9 @@ import Home from '@/client_pages/home';
 
 const Page = () => {
   return (
-    <div>
+    <>
       <Home />
-    </div>
+    </>
   );
 };
 

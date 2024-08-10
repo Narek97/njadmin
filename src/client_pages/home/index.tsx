@@ -9,7 +9,7 @@ const Home = () => {
   const t = useTranslations('users');
 
   return (
-    <div>
+    <>
       <AdminTable
         title={t('title')}
         filter={{
@@ -169,7 +169,7 @@ const Home = () => {
           updateUrl: '/update',
         }}
       />
-    </div>
+    </>
   );
 };
 

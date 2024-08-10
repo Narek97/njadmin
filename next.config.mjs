@@ -15,6 +15,18 @@ const nextConfig = {
     ];
   },
 
+  images: {
+    // todo
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+
 
   webpack(config) {
     // Grab the existing rule that handles SVG imports

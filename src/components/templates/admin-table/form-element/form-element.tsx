@@ -39,6 +39,11 @@ const FormElement: FC<IFormElement> = ({ input, errors, register }) => {
         );
       }
 
+      case 'quill': {
+        // ('todo');
+        return;
+      }
+
       default: {
         return <CustomInput input={input} errors={errors} register={register} />;
       }

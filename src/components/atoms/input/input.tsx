@@ -2,13 +2,12 @@
 import { TextField, TextFieldProps } from '@mui/material';
 import React, { FC } from 'react';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 
 interface ICustomInput {
   input: AdminTableInputType;
-  errors?: FieldErrors<ObjectKeysType>;
-  register?: UseFormRegister<ObjectKeysType>;
+  errors?: FieldErrors<any>;
+  register?: UseFormRegister<any>;
 }
 
 const CustomInput: FC<ICustomInput & TextFieldProps> = ({

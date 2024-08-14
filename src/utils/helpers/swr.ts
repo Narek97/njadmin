@@ -1,9 +1,10 @@
 import axios from 'axios';
-// import { getCookies } from '@/utils/helpers/cookies';
+import { accessToken } from '@/utils/constants/global';
+import { getCookies } from '@/utils/helpers/cookies';
 
 export const axiosGetFetcher = async (url: string) => {
-  // const token = getCookies(process.env.NEXT_PUBLIC_ACCESS_TOKEN || 'instant-token');
-  const token = '';
+  const token = getCookies(accessToken);
+
   try {
     const response = await axios.get(url, {
       headers: {
@@ -19,10 +20,10 @@ export const axiosGetFetcher = async (url: string) => {
 
 export const axiosPostFetcher = async (url: string, { arg }: { arg: any }) => {
   const isFormData = arg instanceof FormData;
-  // const token = getCookies(process.env.NEXT_PUBLIC_ACCESS_TOKEN || 'instant-token');
-  const token = '';
 
-  const method = isFormData ? arg.get('method') : arg.method;
+  const token = getCookies(accessToken);
+
+  const method = isFormData ? arg?.get('method') : arg?.method;
 
   try {
     const response = await axios({

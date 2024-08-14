@@ -1,14 +1,16 @@
 import React, { FC } from 'react';
+import { accessToken } from '@/utils/constants/global';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { ACCESS_TOKEN } from '@/utils/constants/global';
-import { getCookies } from '@/utils/helpers/cookies';
 
 interface IAuthLayout {
   children: React.ReactNode;
 }
 const AuthLayout: FC<IAuthLayout> = ({ children }) => {
-  const token = getCookies(ACCESS_TOKEN || '');
-  if (token?.value) {
+  const cookieStore = cookies();
+  const token = cookieStore.get(accessToken);
+
+  if (token) {
     redirect('/en/home');
   }
   return <>{children}</>;

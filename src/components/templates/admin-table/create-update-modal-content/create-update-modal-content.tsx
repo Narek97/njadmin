@@ -32,8 +32,6 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     defaultValues: formInitialData,
   });
 
-  console.log(errors, 'errors');
-
   const onHandleSubmit = (formData: typeof formInitialData) => {
     if (createUpdateModalType === CRUDEnum.Create) {
       console.log(createUrl, 'createUrl');
@@ -46,10 +44,7 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
 
   return (
     <div className={'create-update-modal-content'}>
-      <form
-        data-testid="create-edit-form-block-test-id"
-        className={`create-update-modal-content--form`}
-        onSubmit={handleSubmit(onHandleSubmit)}>
+      <form className={`create-update-modal-content--form`} onSubmit={handleSubmit(onHandleSubmit)}>
         {formInputs?.map(input => {
           return createUpdateModalType === CRUDEnum.Create && input.useInCreation ? (
             <div key={input.id}>

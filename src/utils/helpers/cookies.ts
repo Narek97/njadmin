@@ -1,7 +1,19 @@
-import { cookies } from 'next/headers';
-import { Cookie } from '@/utils/ts/types/global.types';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
-export const getCookies = (name: string): Cookie | undefined => {
-  const cookieStore = cookies() as any;
-  return cookieStore.get(name);
+export const setCookies = (name: string, value: string) => {
+  return setCookie(name, value, {
+    path: '/',
+    domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+  });
+};
+
+export const getCookies = (name: string) => {
+  return getCookie(name);
+};
+
+export const removeCookies = (name: string) => {
+  return deleteCookie(name, {
+    path: '/',
+    domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+  });
 };

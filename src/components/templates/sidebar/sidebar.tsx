@@ -1,48 +1,111 @@
 'use client';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import './sidebar.scss';
 import Image from 'next/image';
 import { MenuPanelType, UserType } from '@/utils/ts/types/global.types';
-
+import PagesIcon from '@mui/icons-material/Pages';
+import PersonIcon from '@mui/icons-material/Person';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { userState } from '@/store/atoms/user.atom';
+import { colorModeState, isWhiteModeState } from '@/store/atoms/color-mode.atom';
+import { Switch } from '@mui/material';
+import useSWRMutation from 'swr/mutation';
+import { axiosPostFetcher } from '@/utils/helpers/swr';
+import { removeCookies } from '@/utils/helpers/cookies';
+import { accessToken, refreshToken } from '@/utils/constants/global';
+import { useRouter } from 'next/navigation';
 interface ISidebar {
   menu: Array<MenuPanelType>;
-  user: UserType;
+  user: UserType | null;
 }
 
 const Sidebar: FC<ISidebar> = ({ menu, user }) => {
-  console.log(menu, 'menu');
+  const router = useRouter();
+
+  const setUser = useSetRecoilState(userState);
+  const colorMode = useRecoilValue(colorModeState);
+  const [isWhiteMode, setIsWhiteMode] = useRecoilState(isWhiteModeState);
+
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [isOpenMenuList, setIsOpenMenuList] = useState<boolean>(true);
+
+  const { trigger: signOut } = useSWRMutation(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`,
+    axiosPostFetcher,
+    {
+      onSuccess: () => {
+        setUser(null);
+        removeCookies(accessToken);
+        removeCookies(refreshToken);
+        router.push('/en/login');
+      },
+    },
+  );
+
+  const onHandleLogOut = async () => {
+    await signOut();
+  };
+
+  useEffect(() => {
+    user && setUser(user);
+  }, [setUser, user]);
 
   return (
     <>
-      <div className={`sidebar ${isOpenMenu ? 'sidebar--open-menu' : ''}`}>
+      <div
+        className={`sidebar ${isOpenMenu ? 'sidebar--open-menu' : ''}`}
+        style={{
+          backgroundColor: isWhiteMode ? colorMode.white : colorMode.dark,
+          borderRight: `1px solid ${isWhiteMode ? colorMode.dark : colorMode.white}`,
+        }}>
         <button
           onClick={() => setIsOpenMenu(prev => !prev)}
           className={'sidebar--open-close-button'}>
           {`>`}
         </button>
+        <div className={'sidebar--list-container'}>
+          <ul
+            className={`sidebar--list ${isOpenMenuList ? 'sidebar--open-list' : 'sidebar--close-list'}`}>
+            <li className={'sidebar--user-list'}>
+              <div className={'sidebar--user-avatar-block'}>
+                {user?.photo ? (
+                  <Image
+                    src={user?.photo || ''}
+                    alt={'Avatar'}
+                    width={150}
+                    height={150}
+                    className={'sidebar--user-avatar'}
+                  />
+                ) : (
+                  <PersonIcon />
+                )}
+              </div>
 
-        <ul className={'sidebar--list'}>
-          <li className={'sidebar--user-list'}>
-            <div className={'sidebar--user-avatar-block'}>
-              <Image
-                src={user.avatar}
-                alt={'Avatar'}
-                width={150}
-                height={150}
-                className={'sidebar--user-avatar'}
-              />
-            </div>
+              <div className={'sidebar--user-avatar-info'}>
+                <p>{user?.name}</p>
+                <p>{user?.last_name}</p>
+              </div>
+            </li>
 
-            <div className={'sidebar--user-avatar-info'}>
-              <p>{user.name}</p>
-              <p>{user.surName}</p>
-            </div>
-          </li>
-          {menu.map(m => (
-            <MenuPanelItem menu={m} key={m.id} />
-          ))}
-        </ul>
+            {menu.map(m => (
+              <MenuPanelItem menu={m} key={m.id} />
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <button onClick={() => setIsOpenMenuList(prev => !prev)}>...</button>
+        </div>
+
+        <div>
+          <Switch
+            onChange={() => setIsWhiteMode(prev => !prev)}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+        <div>
+          <button onClick={onHandleLogOut}>Logout</button>
+        </div>
       </div>
     </>
   );
@@ -56,7 +119,7 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
   return (
     <li className={'sidebar--menu-list'}>
       <div className={'sidebar--menu-list--first-block'}>
-        {menu.icon && (
+        {menu.icon ? (
           <Image
             src={menu.icon}
             alt={'Avatar'}
@@ -64,10 +127,12 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
             height={150}
             className={'sidebar--menu-icon'}
           />
+        ) : (
+          <PagesIcon />
         )}
 
         <p className={'sidebar--menu-title'}>{menu.title}</p>
-        {menu.addButton ? (
+        {menu.add_button ? (
           <button className={'sidebar--menu-add-button'}>+</button>
         ) : (
           <div className={'sidebar--menu-empty-button'} />
@@ -85,7 +150,7 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
           {menu.subMenu?.map(sumBenu => (
             <li key={sumBenu.id} className={'sidebar--menu-list'}>
               <div className={'sidebar--menu-list--first-block'}>
-                {sumBenu.icon && (
+                {sumBenu.icon ? (
                   <Image
                     src={sumBenu.icon}
                     alt={'Avatar'}
@@ -93,10 +158,12 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
                     height={150}
                     className={'sidebar--menu-icon'}
                   />
+                ) : (
+                  <PagesIcon />
                 )}
 
                 <p className={'sidebar--menu-title'}>{sumBenu.title}</p>
-                {sumBenu.addButton && <button className={'sidebar--menu-add-button'}>+</button>}
+                {sumBenu.add_button && <button className={'sidebar--menu-add-button'}>+</button>}
                 {sumBenu.subMenu?.length && (
                   <button className={'sidebar--menu-sub-menu-button'}>{`>`}</button>
                 )}

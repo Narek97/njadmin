@@ -1,1 +1,7 @@
-1.
+1. header or {key,value,isSortable,}
+2. custom componnets Array<React.Node>
+3. table row filds,
+   - single multy upload
+   - mettods,(get, popupy bacel ete uzi, hovver, met interfase)
+4. useric vercnel rolery vor haskamnas vor actiony nkarel, (edit,delete)
+

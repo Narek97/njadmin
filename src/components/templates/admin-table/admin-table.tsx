@@ -31,6 +31,8 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
     setAnchorEl(null);
   };
 
+  console.log(isSelectAll, 'isSelectAll');
+
   const onHandleCreateInitialFilterValue = useCallback(() => {
     if (filter) {
       filter.filterInputs.forEach(input => {

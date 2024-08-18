@@ -9,7 +9,7 @@ interface IMenuPanelClientLayout {
 
 const MenuPanelClientLayout: FC<IMenuPanelClientLayout> = ({ children }) => {
   const colorMode = useRecoilValue(colorModeState);
-  const [isWhiteMode, setIsWhiteMode] = useRecoilState(isWhiteModeState);
+  const [isWhiteMode] = useRecoilState(isWhiteModeState);
 
   return (
     <div

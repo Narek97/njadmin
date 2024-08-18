@@ -7,23 +7,14 @@
   max-width: 60px;
   transition: 0.3s;
 
-  &--list {
-    padding: 10px;
-  }
-
   &--list-container {
     height: calc(100dvh - 80px);
   }
 
-  &--open-list {
-    overflow-y: auto;
+  &--list {
+    padding: 10px;
     overflow-x: hidden;
-    height: 100%;
-  }
-
-  &--close-list {
-    overflow: hidden;
-    height: 130px;
+    overflow-y: auto;
   }
 
   &--user-list {

@@ -27,7 +27,6 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
   const [isWhiteMode, setIsWhiteMode] = useRecoilState(isWhiteModeState);
 
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const [isOpenMenuList, setIsOpenMenuList] = useState<boolean>(true);
 
   const { trigger: signOut } = useSWRMutation(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`,
@@ -64,8 +63,7 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
           {`>`}
         </button>
         <div className={'sidebar--list-container'}>
-          <ul
-            className={`sidebar--list ${isOpenMenuList ? 'sidebar--open-list' : 'sidebar--close-list'}`}>
+          <ul className={'sidebar--list'}>
             <li className={'sidebar--user-list'}>
               <div className={'sidebar--user-avatar-block'}>
                 {user?.photo ? (
@@ -91,10 +89,6 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
               <MenuPanelItem menu={m} key={m.id} />
             ))}
           </ul>
-        </div>
-
-        <div>
-          <button onClick={() => setIsOpenMenuList(prev => !prev)}>...</button>
         </div>
 
         <div>
@@ -147,12 +141,12 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
       </div>
       <div className={`${isOpenSubMenu ? 'sidebar--open-sub-menu' : 'sidebar--close-sub-menu'}`}>
         <ul className={'sidebar--menu-list--second-block'}>
-          {menu.subMenu?.map(sumBenu => (
-            <li key={sumBenu.id} className={'sidebar--menu-list'}>
+          {menu.subMenu?.map(subMenu => (
+            <li key={subMenu.id} className={'sidebar--menu-list'}>
               <div className={'sidebar--menu-list--first-block'}>
-                {sumBenu.icon ? (
+                {subMenu.icon ? (
                   <Image
-                    src={sumBenu.icon}
+                    src={subMenu.icon}
                     alt={'Avatar'}
                     width={150}
                     height={150}
@@ -162,9 +156,9 @@ const MenuPanelItem = ({ menu }: { menu: MenuPanelType }) => {
                   <PagesIcon />
                 )}
 
-                <p className={'sidebar--menu-title'}>{sumBenu.title}</p>
-                {sumBenu.add_button && <button className={'sidebar--menu-add-button'}>+</button>}
-                {sumBenu.subMenu?.length && (
+                <p className={'sidebar--menu-title'}>{subMenu.title}</p>
+                {subMenu.add_button && <button className={'sidebar--menu-add-button'}>+</button>}
+                {subMenu.subMenu?.length && (
                   <button className={'sidebar--menu-sub-menu-button'}>{`>`}</button>
                 )}
               </div>

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import './create-update-modal-content.scss';
-import { AdminTableInputType, AType } from '@/utils/ts/types/admin-table.types';
+import { AdminTableInputType, CreateUpdateType } from '@/utils/ts/types/admin-table.types';
 import { useForm } from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import { CRUDEnum } from '@/utils/ts/enums/global.enums';
@@ -9,7 +9,7 @@ import FormElement from '@/components/templates/admin-table/form-element/form-el
 interface ICreateUpdateModalContent {
   createUpdateRow: {
     formInitialData: ObjectKeysType;
-    formInputs?: Array<AdminTableInputType & AType>;
+    formInputs?: Array<AdminTableInputType & CreateUpdateType>;
     createUrl: string;
     updateUrl: string;
   };

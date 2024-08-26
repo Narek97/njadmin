@@ -2,7 +2,7 @@
 
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import './admin-table.scss';
-import { AdminTableType } from '@/utils/ts/types/admin-table.types';
+import { AdminTableRowType, AdminTableType, RowType } from '@/utils/ts/types/admin-table.types';
 import { validateUniqueFilterInputNames } from '@/utils/helpers/global';
 import CustomModal from '@/components/atoms/modal/custom-modal';
 import { IconButton, Menu, MenuItem } from '@mui/material';
@@ -10,8 +10,17 @@ import { CRUDEnum } from '@/utils/ts/enums/global.enums';
 import CreateUpdateModalContent from '@/components/templates/admin-table/create-update-modal-content/create-update-modal-content';
 import FilterElement from '@/components/templates/admin-table/filter-element/filter-element';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
+import Table from '@/components/templates/admin-table/table/table';
 
-const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRow }) => {
+const AdminTable: FC<AdminTableType> = ({
+  title,
+  filter,
+  actions,
+  createUpdateRow,
+  columns,
+  rows,
+  onHandleSortTable,
+}) => {
   const { isSelect, isExport, buttons: leftButton } = actions?.leftButtons || {};
   const { isCreate, buttons: rightButtons } = actions?.rightButtons || {};
   const [filtersValue, setFiltersValue] = useState<ObjectKeysType>({});
@@ -30,8 +39,6 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  console.log(isSelectAll, 'isSelectAll');
 
   const onHandleCreateInitialFilterValue = useCallback(() => {
     if (filter) {
@@ -77,6 +84,26 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
     setIsOpenDeleteModal(prev => !prev);
   };
 
+  const convertArray = useCallback((arr: RowType[]) => {
+    return arr.reduce((acc, item) => {
+      (acc as any)[item.key] = item.value;
+      return acc;
+    }, {});
+  }, []);
+
+  const onHandleEdit = useCallback(
+    (row: AdminTableRowType) => {
+      setCreateUpdateModalType(CRUDEnum.Update);
+      setFormInitialData(convertArray(row.row));
+      onHandleToggleCreateUpdateModalModal();
+    },
+    [convertArray],
+  );
+
+  const onHandleDelete = useCallback((row: AdminTableRowType) => {
+    console.log(row, 'row');
+  }, []);
+
   useEffect(() => {
     onHandleCreateInitialFilterValue();
     onHandleCreateFormInitialData();
@@ -89,6 +116,7 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
   return (
     <div className={'admin-table'}>
       <h3 className={'admin-table--title'}>{title}</h3>
+
       {isOpenUpdateModal && (
         <CustomModal
           isOpen={isOpenUpdateModal}
@@ -243,20 +271,27 @@ const AdminTable: FC<AdminTableType> = ({ title, filter, actions, createUpdateRo
         </div>
       ) : null}
 
-      <div>
-        <div>
-          <button
-            onClick={() => {
-              setCreateUpdateModalType(CRUDEnum.Update);
-              setFormInitialData({ name: 'helll', surname: 'barev' });
-              onHandleToggleCreateUpdateModalModal();
-            }}>
-            Update
-          </button>
-        </div>
+      <div className={'admin-table--table-block'}>
+        <Table columns={columns} rows={rows} onHandleSortTable={onHandleSortTable} />
+        <Table
+          columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
+          rows={rows}
+          actions={{ onHandleEdit, onHandleDelete }}
+        />
       </div>
     </div>
   );
 };
 
 export default AdminTable;
+
+// <div>
+//   <button
+//     onClick={() => {
+//       setCreateUpdateModalType(CRUDEnum.Update);
+//       setFormInitialData({ name: 'helll', surname: 'barev' });
+//       onHandleToggleCreateUpdateModalModal();
+//     }}>
+//     Update
+//   </button>
+// </div>

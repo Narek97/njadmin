@@ -1,7 +1,7 @@
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
 import React from 'react';
 
-export type AType = {
+export type CreateUpdateType = {
   useInCreation: boolean;
   useInUpdate: boolean;
 };
@@ -13,11 +13,35 @@ export type AdminTableInputType = {
   label?: string;
   icon?: React.ReactNode;
   defaultValue?: string | number | Date | boolean;
-  sx?: {};
+  sx?: React.CSSProperties;
   attr?: {};
   methods?: {};
   validation?: {};
   value?: any; //todo
+};
+
+export type AdminTableColumnType = {
+  id: number;
+  key: string;
+  name: string;
+  align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  style?: React.CSSProperties;
+  isSortable?: boolean;
+};
+
+export type RowType = {
+  key: string;
+  value: string | number | Date | boolean;
+  type: InputTypeEnum;
+  align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
+  sx?: React.CSSProperties;
+  attr?: {};
+  methods?: {};
+};
+
+export type AdminTableRowType = {
+  id: number;
+  row: Array<RowType>;
 };
 
 export type AdminTableType = {
@@ -53,9 +77,16 @@ export type AdminTableType = {
       }>;
     };
   };
+
   createUpdateRow: {
-    formInputs: Array<AdminTableInputType & AType>;
+    formInputs: Array<AdminTableInputType & CreateUpdateType>;
     createUrl: string;
     updateUrl: string;
   };
+
+  columns: Array<AdminTableColumnType>;
+
+  rows: Array<AdminTableRowType>;
+
+  onHandleSortTable?: (sortType: 'asc' | 'desc') => void;
 };

@@ -12,5 +12,14 @@ export const theme = createTheme({
         root: {},
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
+          border: 'none',
+          borderRadius: 'initial',
+        },
+      },
+    },
   },
 });

@@ -11,27 +11,34 @@ import CreateUpdateModalContent from '@/components/templates/admin-table/create-
 import FilterElement from '@/components/templates/admin-table/filter-element/filter-element';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import Table from '@/components/templates/admin-table/table/table';
+import { useQueryParam } from '@/hooks/useQueryParam';
 
 const AdminTable: FC<AdminTableType> = ({
   title,
   filter,
   actions,
   createUpdateRow,
+  deleteRow,
   columns,
   rows,
-  onHandleSortTable,
 }) => {
+  const { addNewQueryParam, deleteQueryParam, removeQueryParams } = useQueryParam();
+
+  const { onHandleConfirmDelete } = deleteRow;
+
   const { isSelect, isExport, buttons: leftButton } = actions?.leftButtons || {};
   const { isCreate, buttons: rightButtons } = actions?.rightButtons || {};
+
   const [filtersValue, setFiltersValue] = useState<ObjectKeysType>({});
   const [formInitialData, setFormInitialData] = useState<ObjectKeysType>({});
-  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState<boolean>(false);
   const [isSelectAll, setIsSelectAll] = useState<boolean>(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
+  const [isLoadingDeleteRow, setIsLoadingDeleteRow] = useState<boolean>(false);
+  const [selectedRowIds, setSelectedRowIds] = useState<Array<number>>([]);
   const [isOpenCreateUpdateModal, setIsOpenCreateUpdateModal] = useState<boolean>(false);
   const [createUpdateModalType, setCreateUpdateModalType] = useState<CRUDEnum>(CRUDEnum.Create);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -45,7 +52,7 @@ const AdminTable: FC<AdminTableType> = ({
       filter.filterInputs.forEach(input => {
         setFiltersValue((prev: any) => ({
           ...prev,
-          [input.name]: '',
+          [input.name]: input.value || '',
         }));
       });
     }
@@ -68,8 +75,14 @@ const AdminTable: FC<AdminTableType> = ({
   }, []);
 
   const onHandleSearch = useCallback(() => {
-    console.log(filter?.searchUrl);
-  }, [filter?.searchUrl]);
+    for (const property in filtersValue) {
+      if (filtersValue[property]) {
+        addNewQueryParam(property, filtersValue[property]);
+      } else {
+        deleteQueryParam(property);
+      }
+    }
+  }, [addNewQueryParam, deleteQueryParam, filtersValue]);
 
   const onHandleSelectAll = () => {
     setIsSelectAll(prev => !prev);
@@ -101,8 +114,16 @@ const AdminTable: FC<AdminTableType> = ({
   );
 
   const onHandleDelete = useCallback((row: AdminTableRowType) => {
-    console.log(row, 'row');
+    setSelectedRowIds([row.id]);
+    setIsOpenDeleteModal(prev => !prev);
   }, []);
+
+  const onHandleSortTable = useCallback(
+    (key: string, sortType: 'asc' | 'desc') => {
+      addNewQueryParam('order', sortType);
+    },
+    [addNewQueryParam],
+  );
 
   useEffect(() => {
     onHandleCreateInitialFilterValue();
@@ -117,21 +138,40 @@ const AdminTable: FC<AdminTableType> = ({
     <div className={'admin-table'}>
       <h3 className={'admin-table--title'}>{title}</h3>
 
-      {isOpenUpdateModal && (
-        <CustomModal
-          isOpen={isOpenUpdateModal}
-          handleClose={() => setIsOpenUpdateModal(false)}
-          canCloseWithOutsideClick={true}>
-          <div>hello</div>
-        </CustomModal>
-      )}
-
       {isOpenDeleteModal && (
         <CustomModal
           isOpen={isOpenDeleteModal}
           handleClose={onHandleToggleDeleteModal}
           canCloseWithOutsideClick={true}>
-          <div>delete</div>
+          <div>
+            <p>Are you sure to want delete this row</p>
+            <div>
+              <button
+                disabled={isLoadingDeleteRow}
+                onClick={() => {
+                  setSelectedRowIds([]);
+                  setIsOpenDeleteModal(false);
+                }}>
+                Close
+              </button>
+              <button
+                disabled={isLoadingDeleteRow}
+                onClick={async () => {
+                  setIsLoadingDeleteRow(true);
+                  const onSuccess = () => {
+                    setSelectedRowIds([]);
+                    setIsOpenDeleteModal(false);
+                    setIsLoadingDeleteRow(false);
+                  };
+                  const onError = () => {
+                    setIsLoadingDeleteRow(false);
+                  };
+                  await onHandleConfirmDelete(selectedRowIds!, onSuccess, onError);
+                }}>
+                Yes
+              </button>
+            </div>
+          </div>
         </CustomModal>
       )}
       {isOpenCreateUpdateModal && (
@@ -161,7 +201,13 @@ const AdminTable: FC<AdminTableType> = ({
             ))}
           </>
 
-          <button onClick={onHandleCreateInitialFilterValue}>Clear</button>
+          <button
+            onClick={() => {
+              onHandleCreateInitialFilterValue();
+              removeQueryParams();
+            }}>
+            Clear
+          </button>
           {filter.isSearchButton && <button onClick={onHandleSearch}>Search</button>}
         </div>
       ) : null}
@@ -273,25 +319,16 @@ const AdminTable: FC<AdminTableType> = ({
 
       <div className={'admin-table--table-block'}>
         <Table columns={columns} rows={rows} onHandleSortTable={onHandleSortTable} />
-        <Table
-          columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
-          rows={rows}
-          actions={{ onHandleEdit, onHandleDelete }}
-        />
+        {rows.length ? (
+          <Table
+            columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
+            rows={rows}
+            actions={{ onHandleEdit, onHandleDelete }}
+          />
+        ) : null}
       </div>
     </div>
   );
 };
 
 export default AdminTable;
-
-// <div>
-//   <button
-//     onClick={() => {
-//       setCreateUpdateModalType(CRUDEnum.Update);
-//       setFormInitialData({ name: 'helll', surname: 'barev' });
-//       onHandleToggleCreateUpdateModalModal();
-//     }}>
-//     Update
-//   </button>
-// </div>

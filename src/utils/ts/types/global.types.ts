@@ -10,6 +10,7 @@ export type ObjectKeysType = {
 export type MenuPanelType = {
   id: number;
   title: string;
+  name: string;
   icon?: string;
   add_button?: boolean;
   subMenu?: Array<MenuPanelType>;

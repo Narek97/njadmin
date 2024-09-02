@@ -8,13 +8,17 @@
   transition: 0.3s;
 
   &--list-container {
-    height: calc(100dvh - 80px);
   }
 
   &--list {
-    padding: 10px;
+    margin: 8px;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+
+  &--pages-list{
+    height: calc(100dvh - 160px);
+    scrollbar-width: none;
   }
 
   &--user-list {

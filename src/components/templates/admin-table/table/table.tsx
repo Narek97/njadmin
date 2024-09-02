@@ -13,7 +13,7 @@ import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-
 interface ITable {
   columns: Array<AdminTableColumnType>;
   rows: Array<AdminTableRowType>;
-  onHandleSortTable?: (sortType: 'asc' | 'desc') => void;
+  onHandleSortTable?: (key: string, sortType: 'asc' | 'desc') => void;
   actions?: {
     onHandleEdit: (row: AdminTableRowType) => void;
     onHandleDelete: (row: AdminTableRowType) => void;
@@ -23,8 +23,10 @@ interface ITable {
 const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions }) => {
   // const user = useRecoilValue(userState);
 
+  const isCheckbox = columns.some(colum => colum.key === 'checkbox');
+
   return (
-    <div style={{ maxWidth: '3000px' }}>
+    <div style={{ maxWidth: '70dvw' }}>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '20px' }}>
         <TableContainer>
           <MuiTable stickyHeader aria-label="sticky table">
@@ -35,8 +37,8 @@ const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions }) => {
                     <span>{column.name}</span>
                     {onHandleSortTable && column.isSortable && (
                       <span>
-                        <button onClick={() => onHandleSortTable('asc')}>ASC</button>
-                        <button onClick={() => onHandleSortTable('desc')}>DESC</button>
+                        <button onClick={() => onHandleSortTable(column.key, 'asc')}>ASC</button>
+                        <button onClick={() => onHandleSortTable(column.key, 'desc')}>DESC</button>
                       </span>
                     )}
                   </TableCell>
@@ -48,6 +50,12 @@ const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions }) => {
                 rows.map(row => {
                   return (
                     <TableRow key={row.id}>
+                      {isCheckbox && (
+                        <TableCell>
+                          <input type="checkbox" />
+                        </TableCell>
+                      )}
+
                       {row.row.map(rowItem => (
                         <TableCell key={rowItem.key} sx={rowItem.sx} {...rowItem.methods}>
                           {rowItem.value}

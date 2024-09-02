@@ -1,0 +1,32 @@
+export interface IJobListing {
+  skills: string[];
+  id: number;
+  company_id: number;
+  parent_id: number;
+  locale: string;
+  title: string;
+  country: number;
+  city: number;
+  category: string;
+  job_type: string;
+  status: string;
+  currency: string;
+  payment_type: string;
+  industry: string;
+  description: string;
+  pay_from: number;
+  pay_to: number;
+  compensation: string;
+  benefits: string;
+  responsibilities: string;
+  qualifications: string;
+  email: string;
+  department: string | null;
+  urgently: boolean;
+  multi_candidate: boolean;
+  views: number;
+  deadline: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}

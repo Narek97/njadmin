@@ -50,13 +50,12 @@ export type AdminTableType = {
   filter?: {
     filterInputs: Array<AdminTableInputType>;
     isSearchButton: boolean;
-    searchUrl: string;
   };
 
   actions?: {
     leftButtons?: {
-      isSelect: boolean;
-      isExport: boolean;
+      isSelect?: boolean;
+      isExport?: boolean;
       buttons?: Array<{
         id: number;
         style?: {};
@@ -67,8 +66,8 @@ export type AdminTableType = {
     };
 
     rightButtons?: {
-      isCreate: boolean;
-      buttons: Array<{
+      isCreate?: boolean;
+      buttons?: Array<{
         id: number;
         style?: {};
         text?: string;
@@ -80,13 +79,26 @@ export type AdminTableType = {
 
   createUpdateRow: {
     formInputs: Array<AdminTableInputType & CreateUpdateType>;
-    createUrl: string;
-    updateUrl: string;
+    onHandleConfirmCreate: (
+      forms: any,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => Promise<void>;
+    onHandleConfirmUpdate: (
+      forms: any,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => Promise<void>;
+  };
+  deleteRow: {
+    onHandleConfirmDelete: (
+      ids: number[],
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => Promise<void>;
   };
 
   columns: Array<AdminTableColumnType>;
 
   rows: Array<AdminTableRowType>;
-
-  onHandleSortTable?: (sortType: 'asc' | 'desc') => void;
 };

@@ -1,15 +1,15 @@
 import React from 'react';
-import Home from '@/client_pages/home';
+import Jobs from '@/client_pages/jobs';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Home',
+  title: 'Jobs',
 };
 
 const Page = () => {
   return (
     <>
-      <Home />
+      <Jobs />
     </>
   );
 };

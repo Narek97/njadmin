@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import './create-update-modal-content.scss';
 import { AdminTableInputType, CreateUpdateType } from '@/utils/ts/types/admin-table.types';
 import { useForm } from 'react-hook-form';
@@ -10,8 +10,16 @@ interface ICreateUpdateModalContent {
   createUpdateRow: {
     formInitialData: ObjectKeysType;
     formInputs?: Array<AdminTableInputType & CreateUpdateType>;
-    createUrl: string;
-    updateUrl: string;
+    onHandleConfirmCreate: (
+      forms: any,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => Promise<void>;
+    onHandleConfirmUpdate: (
+      forms: any,
+      onSuccess?: () => void,
+      onError?: () => void,
+    ) => Promise<void>;
   };
   createUpdateModalType: CRUDEnum;
   onHandleToggleCreateUpdateModalModal: () => void;
@@ -22,7 +30,9 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
   createUpdateModalType,
   onHandleToggleCreateUpdateModalModal,
 }) => {
-  const { formInitialData, formInputs, createUrl, updateUrl } = createUpdateRow;
+  const { formInitialData, formInputs, onHandleConfirmCreate, onHandleConfirmUpdate } =
+    createUpdateRow;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -32,14 +42,27 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     defaultValues: formInitialData,
   });
 
-  const onHandleSubmit = (formData: typeof formInitialData) => {
+  const onHandleSubmit = async (formData: typeof formInitialData) => {
     if (createUpdateModalType === CRUDEnum.Create) {
-      console.log(createUrl, 'createUrl');
+      try {
+        setIsLoading(true);
+        await onHandleConfirmCreate(formData);
+        onHandleToggleCreateUpdateModalModal();
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+      }
     } else {
-      console.log(updateUrl, 'updateUrl');
+      try {
+        setIsLoading(true);
+
+        await onHandleConfirmUpdate(formData);
+        onHandleToggleCreateUpdateModalModal();
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+      }
     }
-    console.log(formData, ';formData');
-    onHandleToggleCreateUpdateModalModal();
   };
 
   return (
@@ -69,7 +92,7 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
           ) : null;
         })}
 
-        <input type="submit" />
+        <input type="submit" disabled={isLoading} />
       </form>
     </div>
   );

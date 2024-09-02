@@ -5,6 +5,7 @@ export enum InputTypeEnum {
   Text = 'text',
   Select = 'select',
   Quill = 'quill',
+  Array = 'array',
 }
 
 export enum CRUDEnum {

@@ -1,5 +1,6 @@
-import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+
+import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const useQueryParam = () => {
   const searchParams = useSearchParams() as ReadonlyURLSearchParams;
@@ -17,17 +18,23 @@ export const useQueryParam = () => {
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set(name, value);
-
       return params.toString();
     },
     [searchParams],
   );
 
-  const createQueryParam = useCallback(
+  const addNewQueryParam = useCallback(
     (name: string, value: string) => {
       router.push(pathname + '?' + setQueryParam(name, value));
     },
     [setQueryParam, pathname, router],
+  );
+
+  const createQueryParam = useCallback(
+    (name: string, value: string) => {
+      router.push(pathname + '?' + name + '=' + value);
+    },
+    [pathname, router],
   );
 
   const removeQueryParam = useCallback(
@@ -53,9 +60,9 @@ export const useQueryParam = () => {
 
   return {
     getQueryParamValue,
-    setQueryParam,
     createQueryParam,
     deleteQueryParam,
     removeQueryParams,
+    addNewQueryParam,
   };
 };

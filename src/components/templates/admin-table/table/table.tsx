@@ -13,7 +13,7 @@ import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-
 interface ITable {
   columns: Array<AdminTableColumnType>;
   rows: Array<AdminTableRowType>;
-  onHandleSortTable?: (key: string, sortType: 'asc' | 'desc') => void;
+  onHandleSortTable?: (sortBy: string, sortType: 'asc' | 'desc') => void;
   actions?: {
     onHandleEdit: (row: AdminTableRowType) => void;
     onHandleDelete: (row: AdminTableRowType) => void;

@@ -22,7 +22,8 @@ const AdminTable: FC<AdminTableType> = ({
   columns,
   rows,
 }) => {
-  const { addNewQueryParam, deleteQueryParam, removeQueryParams } = useQueryParam();
+  const { addNewQueryParam, addMultipleQueryParams, deleteQueryParam, removeQueryParams } =
+    useQueryParam();
 
   const { onHandleConfirmDelete } = deleteRow;
 
@@ -119,10 +120,10 @@ const AdminTable: FC<AdminTableType> = ({
   }, []);
 
   const onHandleSortTable = useCallback(
-    (key: string, sortType: 'asc' | 'desc') => {
-      addNewQueryParam('order', sortType);
+    async (sortBy: string, sortType: 'asc' | 'desc') => {
+      addMultipleQueryParams({ order: sortType, sort_by: sortBy });
     },
-    [addNewQueryParam],
+    [addMultipleQueryParams],
   );
 
   useEffect(() => {

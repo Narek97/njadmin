@@ -23,6 +23,7 @@ const Jobs = () => {
 
   const title = getQueryParamValue('title');
   const order = getQueryParamValue('order');
+  const sort_by = getQueryParamValue('sort_by');
   const status = getQueryParamValue('status');
 
   if (title) {
@@ -30,6 +31,9 @@ const Jobs = () => {
   }
   if (order) {
     params += `&order=${order}`;
+  }
+  if (sort_by) {
+    params += `&sort_by=${sort_by}`;
   }
   if (status) {
     params += `&status=${status}`;

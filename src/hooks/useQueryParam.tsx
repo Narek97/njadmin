@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { ReadonlyURLSearchParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
 export const useQueryParam = () => {
   const searchParams = useSearchParams() as ReadonlyURLSearchParams;
@@ -28,6 +29,21 @@ export const useQueryParam = () => {
       router.push(pathname + '?' + setQueryParam(name, value));
     },
     [setQueryParam, pathname, router],
+  );
+
+  const addMultipleQueryParams = useCallback(
+    (newParams: ObjectKeysType) => {
+      const searchParams = new URLSearchParams(window.location.search);
+
+      // Add new query params
+      Object.keys(newParams).forEach(key => {
+        searchParams.set(key, newParams[key]);
+      });
+
+      // Update the URL with the new query params
+      router.push(`?${searchParams.toString()}`);
+    },
+    [router],
   );
 
   const createQueryParam = useCallback(
@@ -64,5 +80,6 @@ export const useQueryParam = () => {
     deleteQueryParam,
     removeQueryParams,
     addNewQueryParam,
+    addMultipleQueryParams,
   };
 };

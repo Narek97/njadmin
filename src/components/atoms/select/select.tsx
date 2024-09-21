@@ -1,18 +1,18 @@
 'use client';
-import { FormControl, FormHelperText, TextField, TextFieldProps } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
 import React, { FC } from 'react';
 import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
-interface ICustomInput {
+interface ICustomSelect {
   input: AdminTableInputType;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
-const CustomInput: FC<ICustomInput & TextFieldProps> = ({
+const CustomSelect: FC<ICustomSelect> = ({
   input,
   errors,
   register,
@@ -30,18 +30,26 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
 
   return (
     <FormControl fullWidth error={!!hasError}>
-      <TextField
+      <Select
         {...input.attr}
         {...input.methods}
         {...(register ? register(input.name, input.validation) : {})}
         sx={input.sx}
-        id={input.name} // Ensure accessibility
+        id={input.name} // For accessibility
         {...inputRestParams}
-        onChange={handleChange}
-      />
+        onChange={handleChange}>
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {input.options?.map(option => (
+          <MenuItem value={option.id} key={option.id}>
+            {option.title}
+          </MenuItem>
+        ))}
+      </Select>
       {hasError && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
   );
 };
 
-export default CustomInput;
+export default CustomSelect;

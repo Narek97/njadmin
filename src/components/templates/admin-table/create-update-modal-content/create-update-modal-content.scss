@@ -1,6 +1,14 @@
-@import "src/assets/styles/variables";
-@import "src/assets/styles/mixins";
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/mixins';
 
-.create-update-modal-content{
-
+.create-update-modal-content {
+  height: 80dvh;
+  overflow: auto;
+  padding: 20px;
+  &--form{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 }

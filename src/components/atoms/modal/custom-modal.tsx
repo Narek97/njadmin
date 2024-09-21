@@ -14,28 +14,30 @@ const CustomModal: FC<ICustomModal> = ({
   children,
   isOpen,
   handleClose,
-  canCloseWithOutsideClick,
+  canCloseWithOutsideClick = true, // default to true
   modalSize = 'sm',
 }) => {
-  const onClose = () => {
-    if (canCloseWithOutsideClick) {
+  const handleModalClose = (_: any, reason: string) => {
+    if (canCloseWithOutsideClick && reason !== 'backdropClick') {
       handleClose();
     }
   };
 
   return (
     <Modal
-      aria-labelledby="spring-modal-title"
-      aria-describedby="spring-modal-description"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
       open={isOpen}
-      onClose={onClose}
+      onClose={handleModalClose}
       closeAfterTransition
-      sx={{
-        minHeight: '300px',
-      }}>
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className={`custom-modal ${modalSize}`}>
-        <button className={'close-icon'} data-testid="modal-close-test-id" onClick={handleClose}>
-          x
+        <button
+          className="close-icon"
+          aria-label="Close modal"
+          data-testid="modal-close-test-id"
+          onClick={handleClose}>
+          &times;
         </button>
         {children}
       </div>

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import './menu-panel-layout.scss';
 import { MenuPanelType, UserType } from '@/utils/ts/types/global.types';
-import Sidebar from '@/components/templates/sidebar/sidebar';
-import getAdminMenu from '@/api/getAdminMenu';
-import getMe from '@/api/getMe';
 import MenuPanelClientLayout from '@/layouts/menu-panel-layout/menu-panel-client-layout/menu-panel-client-layout';
+import Sidebar from '@/components/templates/sidebar/sidebar';
+import getAdminMenu from '@/api/get-admin-menu';
+import getMe from '@/api/get-me';
 
 interface IMenuPanelLayout {
   children: React.ReactNode;

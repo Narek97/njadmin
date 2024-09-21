@@ -1,12 +1,13 @@
 'use client';
 import React from 'react';
+import './style.scss';
 import { useForm } from 'react-hook-form';
 import CustomInput from '@/components/atoms/input/input';
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
 import { LoginType } from '@/utils/ts/types/global.types';
 import { useRouter } from 'next/navigation';
-import { axiosPostFetcher } from '@/utils/helpers/swr';
 import useSWRMutation from 'swr/mutation';
+import { axiosPostFetcher } from '@/utils/helpers/swr';
 import { setCookies } from '@/utils/helpers/cookies';
 import { accessToken, refreshToken } from '@/utils/constants/global';
 

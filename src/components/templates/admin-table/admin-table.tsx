@@ -21,6 +21,7 @@ const AdminTable: FC<AdminTableType> = ({
   deleteRow,
   columns,
   rows,
+  isLoading,
 }) => {
   const { addNewQueryParam, addMultipleQueryParams, deleteQueryParam, removeQueryParams } =
     useQueryParam();
@@ -179,7 +180,8 @@ const AdminTable: FC<AdminTableType> = ({
         <CustomModal
           isOpen={isOpenCreateUpdateModal}
           handleClose={onHandleToggleCreateUpdateModalModal}
-          canCloseWithOutsideClick={true}>
+          canCloseWithOutsideClick={true}
+          modalSize={'lg'}>
           <CreateUpdateModalContent
             createUpdateRow={{ ...createUpdateRow, formInitialData }}
             createUpdateModalType={createUpdateModalType}
@@ -317,17 +319,26 @@ const AdminTable: FC<AdminTableType> = ({
           </div>
         </div>
       ) : null}
-
-      <div className={'admin-table--table-block'}>
-        <Table columns={columns} rows={rows} onHandleSortTable={onHandleSortTable} />
-        {rows.length ? (
+      {isLoading && !columns.length ? (
+        <div>Loading ...</div>
+      ) : (
+        <div className={'admin-table--table-block'}>
           <Table
-            columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
+            columns={columns}
             rows={rows}
-            actions={{ onHandleEdit, onHandleDelete }}
+            onHandleSortTable={onHandleSortTable}
+            isLoading={isLoading}
           />
-        ) : null}
-      </div>
+          {rows.length ? (
+            <Table
+              columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
+              rows={rows}
+              actions={{ onHandleEdit, onHandleDelete }}
+              isLoading={isLoading}
+            />
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };

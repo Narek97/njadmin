@@ -7,7 +7,7 @@ export type CreateUpdateType = {
 };
 
 export type AdminTableInputType = {
-  id: number;
+  id: number | string;
   name: string;
   type: InputTypeEnum;
   label?: string;
@@ -18,6 +18,7 @@ export type AdminTableInputType = {
   methods?: {};
   validation?: {};
   value?: any; //todo
+  options?: Array<any>;
 };
 
 export type AdminTableColumnType = {
@@ -31,7 +32,7 @@ export type AdminTableColumnType = {
 
 export type RowType = {
   key: string;
-  value: string | number | Date | boolean;
+  value: string | number | Date | boolean | null;
   type: InputTypeEnum;
   align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   sx?: React.CSSProperties;
@@ -99,6 +100,7 @@ export type AdminTableType = {
   };
 
   columns: Array<AdminTableColumnType>;
-
   rows: Array<AdminTableRowType>;
+
+  isLoading: boolean;
 };

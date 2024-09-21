@@ -1,15 +1,15 @@
 import React from 'react';
-import Jobs from '@/client_pages/jobs';
 import { Metadata } from 'next';
+import Employees from '@/client_pages/employees';
 
 export const metadata: Metadata = {
-  title: 'Jobs',
+  title: 'Employees',
 };
 
-const Page = async () => {
+const Page = () => {
   return (
     <>
-      <Jobs />
+      <Employees />
     </>
   );
 };

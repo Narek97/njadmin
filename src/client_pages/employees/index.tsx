@@ -7,20 +7,21 @@ import useSWR from 'swr';
 import { axiosGetFetcher, axiosPostFetcher } from '@/utils/helpers/swr';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
-import { JobListingType } from '@/utils/ts/types/jobs.types';
-import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
 import useSWRMutation from 'swr/mutation';
-import { formInputs } from '@/client_pages/jobs/constants';
+import { EmployeeType } from '@/utils/ts/types/employee.types';
+import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
+import { formInputs } from '@/client_pages/employees/constants';
 
-interface IJobs {}
+interface IEmployees {}
 
-const Jobs: FC<IJobs> = ({}) => {
+const Employees: FC<IEmployees> = ({}) => {
   const t = useTranslations('jobs');
   const { getQueryParamValue } = useQueryParam();
 
   const [page, setPage] = useState(1);
-  const [jobsCount, setJobsCount] = useState<number>(0);
-  const [jobs, setJobs] = useState<JobListingType[] | null>(null);
+  const [employeesCount, setEmployeesCount] = useState<number>(0);
+  const [employees, setEmployees] = useState<EmployeeType[] | null>(null);
+  const [relations, setRelations] = useState({});
 
   let params = `?page=${page}`;
 
@@ -43,30 +44,31 @@ const Jobs: FC<IJobs> = ({}) => {
   }
 
   const { mutate, isLoading } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/jobs${params}`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employees${params}`,
     axiosGetFetcher,
     {
       onSuccess: data => {
         if (data) {
-          setJobsCount(data.models.count);
-          setJobs(data.models.rows);
+          setEmployeesCount(data.models.count);
+          setEmployees(data.models.rows);
+          setRelations(data.relations);
         }
       },
     },
   );
 
   const { trigger: deleteRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/jobs/delete`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/delete`,
     axiosPostFetcher,
   );
 
   const { trigger: updateRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/jobs/update`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/update`,
     axiosPostFetcher,
   );
 
   const { trigger: createRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/jobs/create`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/create`,
     axiosPostFetcher,
   );
 
@@ -76,7 +78,7 @@ const Jobs: FC<IJobs> = ({}) => {
         { actionType: 'delete', ids },
         {
           onSuccess: () => {
-            // setJobs(prev => prev!.filter(job => !ids.includes(job.id)));
+            // setEmployees(prev => prev!.filter(job => !ids.includes(job.id)));
             mutate();
             onSuccess && onSuccess();
           },
@@ -108,27 +110,6 @@ const Jobs: FC<IJobs> = ({}) => {
       await createRow(
         {
           title: forms.title,
-          company_id: 2,
-          country: 10,
-          city: 500,
-          category: 'remote',
-          job_type: 'part-time',
-          payment_type: 'monthly',
-          industry: 'information technologies',
-          description: 'Create and execute marketing strategies.',
-          pay_from: 1500,
-          pay_to: 5000,
-          compensation: 'Project-based bonuses.',
-          benefits: 'orva verj pachikov barev',
-          responsibilites: "Master's in Computer Science and 5 years of experience.",
-          qualifications: "Master's in Computer Science and 5 years of experience.",
-          email: 'admin_jobs@example.com',
-          department: 'it',
-          skills: ['nodejs', 'laravel'],
-          urgently: 0,
-          multi_candidate: 1,
-          deadline: '2024-11-20 10:00:00',
-          actionType: 'create',
         },
         {
           onSuccess: () => {
@@ -142,26 +123,26 @@ const Jobs: FC<IJobs> = ({}) => {
 
   const columns = useMemo(() => {
     const arr: AdminTableColumnType[] = [{ id: 1, key: 'checkbox', name: '', align: 'left' }];
-    if (jobs) {
+    if (employees) {
       let index = 2;
-      for (const property in jobs[0]) {
+      for (const property in employees[0]) {
         arr.push({ id: index, key: property, name: property, align: 'left', isSortable: true });
         index++;
       }
     }
 
     return arr;
-  }, [jobs]);
+  }, [employees]);
 
   const rows: AdminTableRowType[] =
     useMemo(() => {
-      return jobs?.map(job => ({
-        id: job.id,
-        row: Object.entries(job).map(([key, value]) => {
-          return { id: job.id, type: InputTypeEnum.Text, key, value };
+      return employees?.map(employee => ({
+        id: employee.id,
+        row: Object.entries(employee).map(([key, value]) => {
+          return { key, value };
         }),
       }));
-    }, [jobs]) || [];
+    }, [employees]) || [];
 
   return (
     <>
@@ -192,7 +173,7 @@ const Jobs: FC<IJobs> = ({}) => {
           },
         }}
         createUpdateRow={{
-          formInputs,
+          formInputs: formInputs(relations),
           onHandleConfirmCreate,
           onHandleConfirmUpdate,
         }}
@@ -207,4 +188,4 @@ const Jobs: FC<IJobs> = ({}) => {
   );
 };
 
-export default Jobs;
+export default Employees;

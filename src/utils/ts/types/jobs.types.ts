@@ -1,4 +1,4 @@
-export interface IJobListing {
+export type JobListingType = {
   skills: string[];
   id: number;
   company_id: number;
@@ -29,4 +29,4 @@ export interface IJobListing {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
-}
+};

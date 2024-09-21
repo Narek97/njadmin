@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginPage from '@/client_pages/login';
 
-const Page = () => {
+const Page = async () => {
   return (
     <>
       <LoginPage />

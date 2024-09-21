@@ -1,18 +1,17 @@
-'use client';
-import { FormControl, FormHelperText, TextField, TextFieldProps } from '@mui/material';
 import React, { FC } from 'react';
-import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
+import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
+import { FormControl, FormHelperText, TextField } from '@mui/material';
 
-interface ICustomInput {
+interface ICustomDatePicker {
   input: AdminTableInputType;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
-const CustomInput: FC<ICustomInput & TextFieldProps> = ({
+const CustomDatePicker: FC<ICustomDatePicker> = ({
   input,
   errors,
   register,
@@ -31,17 +30,17 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   return (
     <FormControl fullWidth error={!!hasError}>
       <TextField
-        {...input.attr}
-        {...input.methods}
-        {...(register ? register(input.name, input.validation) : {})}
-        sx={input.sx}
-        id={input.name} // Ensure accessibility
+        type="date"
+        label={input.label || 'Select Date'}
+        InputLabelProps={{ shrink: true }} // Ensures the label stays above the date picker
+        {...register?.(input.name, input.validation)}
         {...inputRestParams}
         onChange={handleChange}
+        error={!!hasError}
       />
       {hasError && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
   );
 };
 
-export default CustomInput;
+export default CustomDatePicker;

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import BaseLayout from '@/layouts/base-layout/base-layout';
 import MenuPanelLayout from '@/layouts/menu-panel-layout/menu-panel-layout';
 import { accessToken } from '@/utils/constants/global';
 import { cookies } from 'next/headers';
@@ -14,10 +15,11 @@ const AuthLayout: FC<IAuthLayout> = ({ children }) => {
   if (!token?.value) {
     redirect('/en/login');
   }
+
   return (
-    <>
-      <MenuPanelLayout>{children}</MenuPanelLayout>
-    </>
+    <MenuPanelLayout>
+      <BaseLayout>{children}</BaseLayout>
+    </MenuPanelLayout>
   );
 };
 

@@ -18,9 +18,10 @@ interface ITable {
     onHandleEdit: (row: AdminTableRowType) => void;
     onHandleDelete: (row: AdminTableRowType) => void;
   };
+  isLoading: boolean;
 }
 
-const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions }) => {
+const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions, isLoading }) => {
   // const user = useRecoilValue(userState);
 
   const isCheckbox = columns.some(colum => colum.key === 'checkbox');
@@ -45,38 +46,48 @@ const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions }) => {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
-              {!actions &&
-                rows.map(row => {
-                  return (
-                    <TableRow key={row.id}>
-                      {isCheckbox && (
+            {isLoading ? (
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <>Loading ..</>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {!actions &&
+                  rows.map(row => {
+                    return (
+                      <TableRow key={row.id}>
+                        {isCheckbox && (
+                          <TableCell>
+                            <input type="checkbox" />
+                          </TableCell>
+                        )}
+
+                        {row.row.map(rowItem => (
+                          <TableCell key={rowItem.key} sx={rowItem.sx} {...rowItem.methods}>
+                            {/*{rowItem.value}*/}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })}
+
+                {actions &&
+                  rows.map(row => {
+                    return (
+                      <TableRow key={row.id}>
                         <TableCell>
-                          <input type="checkbox" />
+                          <button onClick={() => actions.onHandleEdit(row)}>Edit</button>
+                          <button onClick={() => actions?.onHandleDelete(row)}>Delete</button>
                         </TableCell>
-                      )}
-
-                      {row.row.map(rowItem => (
-                        <TableCell key={rowItem.key} sx={rowItem.sx} {...rowItem.methods}>
-                          {rowItem.value}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })}
-
-              {actions &&
-                rows.map(row => {
-                  return (
-                    <TableRow key={row.id}>
-                      <TableCell>
-                        <button onClick={() => actions.onHandleEdit(row)}>Edit</button>
-                        <button onClick={() => actions?.onHandleDelete(row)}>Delete</button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            )}
           </MuiTable>
         </TableContainer>
       </Paper>

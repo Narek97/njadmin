@@ -1,18 +1,18 @@
 'use client';
-import { FormControl, FormHelperText, TextField, TextFieldProps } from '@mui/material';
 import React, { FC } from 'react';
-import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
+import { Checkbox, FormControl, FormHelperText } from '@mui/material';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
+import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
-interface ICustomInput {
+interface ICustomCheckbox {
   input: AdminTableInputType;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
-const CustomInput: FC<ICustomInput & TextFieldProps> = ({
+const CustomCheckbox: FC<ICustomCheckbox> = ({
   input,
   errors,
   register,
@@ -29,14 +29,14 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   };
 
   return (
-    <FormControl fullWidth error={!!hasError}>
-      <TextField
+    <FormControl error={!!hasError}>
+      <Checkbox
         {...input.attr}
         {...input.methods}
         {...(register ? register(input.name, input.validation) : {})}
-        sx={input.sx}
-        id={input.name} // Ensure accessibility
         {...inputRestParams}
+        sx={input.sx}
+        id={input.name}
         onChange={handleChange}
       />
       {hasError && <FormHelperText>{errorMessage}</FormHelperText>}
@@ -44,4 +44,4 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   );
 };
 
-export default CustomInput;
+export default CustomCheckbox;

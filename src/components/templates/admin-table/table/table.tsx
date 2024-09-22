@@ -68,7 +68,7 @@ const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions, isLoadin
 
                         {row.row.map(rowItem => (
                           <TableCell key={rowItem.key} sx={rowItem.sx} {...rowItem.methods}>
-                            {/*{rowItem.value}*/}
+                            {rowItem.value}
                           </TableCell>
                         ))}
                       </TableRow>

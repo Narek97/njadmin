@@ -1,22 +1,37 @@
 import React, { FC } from 'react';
 import CustomInput from '@/components/atoms/input/input';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
-import { FieldErrors, UseFormClearErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormClearErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import QuillEditor from '@/components/atoms/quill-editor/quill-editor';
-import CustomSelect from '@/components/atoms/select/select';
 import CustomDatePicker from '@/components/atoms/date-picker/date-picker';
 import CustomCheckbox from '@/components/atoms/checkbox/checkbox';
+import CustomAutocomplete from '@/components/atoms/autocomplete/autocomplete';
+import CustomSelect from '@/components/atoms/select/select';
 
 interface IFormElement {
   input: AdminTableInputType;
   errors: FieldErrors<ObjectKeysType>;
+  watch: UseFormWatch<ObjectKeysType>;
   register: UseFormRegister<ObjectKeysType>;
-  setValue?: UseFormSetValue<ObjectKeysType>;
+  setFormValue?: UseFormSetValue<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
-const FormElement: FC<IFormElement> = ({ input, errors, register, setValue, clearErrors }) => {
+const FormElement: FC<IFormElement> = ({
+  input,
+  errors,
+  watch,
+  register,
+  clearErrors,
+  setFormValue,
+}) => {
   const commonProps = { input, errors, register, clearErrors };
 
   const getInputByType = (): JSX.Element => {
@@ -28,15 +43,14 @@ const FormElement: FC<IFormElement> = ({ input, errors, register, setValue, clea
         return <CustomDatePicker {...commonProps} />;
 
       case 'select':
-        return <CustomSelect {...commonProps} />;
+        return <CustomSelect {...commonProps} watch={watch} />;
+
+      case 'autocomplete': {
+        return <CustomAutocomplete {...commonProps} setFormValue={setFormValue} watch={watch} />;
+      }
 
       case 'quill':
-        return (
-          <QuillEditor
-            {...commonProps}
-            setValue={setValue} // Only pass if it exists
-          />
-        );
+        return <QuillEditor {...commonProps} setFormValue={setFormValue} />;
 
       case 'checkbox':
         return <CustomCheckbox {...commonProps} />;

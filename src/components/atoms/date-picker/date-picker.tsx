@@ -35,6 +35,9 @@ const CustomDatePicker: FC<ICustomDatePicker> = ({
         InputLabelProps={{ shrink: true }} // Ensures the label stays above the date picker
         {...register?.(input.name, input.validation)}
         {...inputRestParams}
+        inputProps={{
+          ...input.inputProps,
+        }}
         onChange={handleChange}
         error={!!hasError}
       />

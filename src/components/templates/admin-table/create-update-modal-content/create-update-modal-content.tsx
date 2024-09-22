@@ -37,6 +37,7 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
   const {
     register,
     handleSubmit,
+    watch,
     setValue,
     clearErrors,
     formState: { errors },
@@ -45,7 +46,6 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
   });
 
   const onHandleSubmit = async (formData: typeof formInitialData) => {
-    console.log(formData, 'formData');
     if (createUpdateModalType === CRUDEnum.Create) {
       try {
         setIsLoading(true);
@@ -58,7 +58,6 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     } else {
       try {
         setIsLoading(true);
-
         await onHandleConfirmUpdate(formData);
         onHandleToggleCreateUpdateModalModal();
       } catch (err) {
@@ -77,7 +76,8 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
               key={input.id}
               input={input}
               errors={errors}
-              setValue={setValue}
+              watch={watch}
+              setFormValue={setValue}
               register={register}
               clearErrors={clearErrors}
             />

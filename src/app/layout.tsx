@@ -2,6 +2,7 @@ import React from 'react';
 import '@/assets/styles/base.scss';
 import RecoilProvider from '@/providers/recoil-provider';
 import ThemProvider from '@/providers/them-provider';
+import SwrProvider from '@/providers/swr-provider';
 
 export default async function LocaleLayout({
   children,
@@ -14,7 +15,9 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <RecoilProvider>
-          <ThemProvider>{children}</ThemProvider>
+          <ThemProvider>
+            <SwrProvider>{children}</SwrProvider>
+          </ThemProvider>
         </RecoilProvider>
       </body>
     </html>

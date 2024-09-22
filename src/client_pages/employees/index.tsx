@@ -11,6 +11,9 @@ import useSWRMutation from 'swr/mutation';
 import { EmployeeType } from '@/utils/ts/types/employee.types';
 import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
 import { formInputs } from '@/client_pages/employees/constants';
+import { useRecoilValue } from 'recoil';
+import { locationState } from '@/store/atoms/location.atom';
+import { codeState } from '@/store/atoms/code.atom';
 
 interface IEmployees {}
 
@@ -21,17 +24,22 @@ const Employees: FC<IEmployees> = ({}) => {
   const [page, setPage] = useState(1);
   const [employeesCount, setEmployeesCount] = useState<number>(0);
   const [employees, setEmployees] = useState<EmployeeType[] | null>(null);
-  const [relations, setRelations] = useState({});
+  const [statuses, setStatuses] = useState<Array<{ id: number; title: string }>>([]);
+  const [userTypes, setUserTypes] = useState<Array<{ id: number; title: string }>>([]);
+  const [locale, setLocale] = useState<Array<{ id: number; code: string; title: string }>>([]);
+
+  const countries = useRecoilValue(locationState);
+  const codes = useRecoilValue(codeState);
 
   let params = `?page=${page}`;
 
-  const title = getQueryParamValue('title');
+  const name = getQueryParamValue('name');
   const order = getQueryParamValue('order');
   const sort_by = getQueryParamValue('sort_by');
   const status = getQueryParamValue('status');
 
-  if (title) {
-    params += `&title=${title}`;
+  if (name) {
+    params += `&name=${name}`;
   }
   if (order) {
     params += `&order=${order}`;
@@ -49,26 +57,29 @@ const Employees: FC<IEmployees> = ({}) => {
     {
       onSuccess: data => {
         if (data) {
+          console.log(data.models.rows, 'data.models.rows');
           setEmployeesCount(data.models.count);
           setEmployees(data.models.rows);
-          setRelations(data.relations);
+          setStatuses(data.foreignKeys?.status?.data);
+          setUserTypes(data.foreignKeys?.user_type?.data);
+          setLocale(data.foreignKeys?.locale?.data);
         }
       },
     },
   );
 
   const { trigger: deleteRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/delete`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employees/delete`,
     axiosPostFetcher,
   );
 
   const { trigger: updateRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/update`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employees/update`,
     axiosPostFetcher,
   );
 
   const { trigger: createRow } = useSWRMutation(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employee/create`,
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/employees/create`,
     axiosPostFetcher,
   );
 
@@ -78,7 +89,6 @@ const Employees: FC<IEmployees> = ({}) => {
         { actionType: 'delete', ids },
         {
           onSuccess: () => {
-            // setEmployees(prev => prev!.filter(job => !ids.includes(job.id)));
             mutate();
             onSuccess && onSuccess();
           },
@@ -108,9 +118,7 @@ const Employees: FC<IEmployees> = ({}) => {
   const onHandleConfirmCreate = useCallback(
     async (forms: any) => {
       await createRow(
-        {
-          title: forms.title,
-        },
+        { ...forms, user_id: 26 },
         {
           onSuccess: () => {
             mutate();
@@ -152,8 +160,8 @@ const Employees: FC<IEmployees> = ({}) => {
           filterInputs: [
             {
               id: 1,
-              name: 'title',
-              value: title || '',
+              name: 'name',
+              value: name || '',
               type: InputTypeEnum.Text,
               attr: {
                 placeholder: 'Title',
@@ -173,7 +181,13 @@ const Employees: FC<IEmployees> = ({}) => {
           },
         }}
         createUpdateRow={{
-          formInputs: formInputs(relations),
+          formInputs: formInputs({
+            countries,
+            codes,
+            statuses,
+            userTypes,
+            locale,
+          }),
           onHandleConfirmCreate,
           onHandleConfirmUpdate,
         }}

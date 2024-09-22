@@ -1,6 +1,6 @@
 'use client';
 import { FormControl, FormHelperText, TextField, TextFieldProps } from '@mui/material';
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
@@ -10,6 +10,8 @@ interface ICustomInput {
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
+  value?: string | number;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
 const CustomInput: FC<ICustomInput & TextFieldProps> = ({
@@ -17,14 +19,19 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   errors,
   register,
   clearErrors,
+  value,
+  onChange,
   ...inputRestParams
 }) => {
   const hasError = errors && errors[input.name];
   const errorMessage = hasError ? (errors[input.name]?.message as string) : '';
 
-  const handleChange = () => {
+  const handleChange = e => {
     if (clearErrors) {
       clearErrors(input.name);
+    }
+    if (onChange) {
+      onChange(e);
     }
   };
 
@@ -36,6 +43,7 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
         {...(register ? register(input.name, input.validation) : {})}
         sx={input.sx}
         id={input.name} // Ensure accessibility
+        value={value}
         {...inputRestParams}
         onChange={handleChange}
       />

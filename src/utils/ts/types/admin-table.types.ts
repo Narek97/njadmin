@@ -1,5 +1,6 @@
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
 import React from 'react';
+import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
 export type CreateUpdateType = {
   useInCreation: boolean;
@@ -14,9 +15,10 @@ export type AdminTableInputType = {
   icon?: React.ReactNode;
   defaultValue?: string | number | Date | boolean;
   sx?: React.CSSProperties;
-  attr?: {};
-  methods?: {};
-  validation?: {};
+  inputProps?: ObjectKeysType;
+  attr?: ObjectKeysType;
+  methods?: ObjectKeysType;
+  validation?: ObjectKeysType;
   value?: any; //todo
   options?: Array<any>;
 };

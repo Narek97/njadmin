@@ -1,6 +1,6 @@
 'use client';
 import React, { FC } from 'react';
-import { Checkbox, FormControl, FormHelperText } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
@@ -30,15 +30,21 @@ const CustomCheckbox: FC<ICustomCheckbox> = ({
 
   return (
     <FormControl error={!!hasError}>
-      <Checkbox
-        {...input.attr}
-        {...input.methods}
-        {...(register ? register(input.name, input.validation) : {})}
-        {...inputRestParams}
-        sx={input.sx}
-        id={input.name}
-        onChange={handleChange}
+      <FormControlLabel
+        control={
+          <Checkbox
+            {...input.attr}
+            {...input.methods}
+            {...(register ? register(input.name, input.validation) : {})}
+            {...inputRestParams}
+            sx={input.sx}
+            id={input.name}
+            onChange={handleChange}
+          />
+        }
+        label={input.attr?.label || ''}
       />
+
       {hasError && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
   );

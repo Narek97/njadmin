@@ -17,8 +17,8 @@ const CustomModal: FC<ICustomModal> = ({
   canCloseWithOutsideClick = true, // default to true
   modalSize = 'sm',
 }) => {
-  const handleModalClose = (_: any, reason: string) => {
-    if (canCloseWithOutsideClick && reason !== 'backdropClick') {
+  const handleModalClose = () => {
+    if (canCloseWithOutsideClick) {
       handleClose();
     }
   };

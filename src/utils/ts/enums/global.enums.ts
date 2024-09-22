@@ -5,6 +5,7 @@ export enum InputTypeEnum {
   Range = 'range',
   Text = 'text',
   Select = 'select',
+  Autocomplete = 'autocomplete',
   Quill = 'quill',
   Array = 'array',
 }

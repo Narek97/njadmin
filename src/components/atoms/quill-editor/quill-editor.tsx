@@ -10,7 +10,7 @@ interface IQuillEditor {
   input: AdminTableInputType;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
-  setValue?: UseFormSetValue<ObjectKeysType>;
+  setFormValue?: UseFormSetValue<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
@@ -18,7 +18,7 @@ const QuillEditor: FC<IQuillEditor> = ({
   input,
   errors,
   register,
-  setValue,
+  setFormValue,
   clearErrors,
   ...inputRestParams
 }) => {
@@ -29,9 +29,9 @@ const QuillEditor: FC<IQuillEditor> = ({
 
   const handleChange = (text: string, editor: any) => {
     setEditorHtml(text);
-    if (setValue) {
+    if (setFormValue) {
       const isValidContent = editor.getLength() > 1;
-      setValue(input.name, isValidContent ? text : '', { shouldValidate: true });
+      setFormValue(input.name, isValidContent ? text : '', { shouldValidate: true });
     }
     if (clearErrors) {
       clearErrors(input.name);

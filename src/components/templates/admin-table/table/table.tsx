@@ -14,6 +14,7 @@ interface ITable {
   columns: Array<AdminTableColumnType>;
   rows: Array<AdminTableRowType>;
   onHandleSortTable?: (sortBy: string, sortType: 'asc' | 'desc') => void;
+  onHandleMultiSelect?: (id: number) => void;
   actions?: {
     onHandleEdit: (row: AdminTableRowType) => void;
     onHandleDelete: (row: AdminTableRowType) => void;
@@ -21,7 +22,15 @@ interface ITable {
   isLoading: boolean;
 }
 
-const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions, isLoading }) => {
+const Table: FC<ITable> = ({
+  columns,
+  rows,
+  onHandleSortTable,
+  onHandleMultiSelect,
+  actions,
+
+  isLoading,
+}) => {
   // const user = useRecoilValue(userState);
 
   const isCheckbox = columns.some(colum => colum.key === 'checkbox');
@@ -60,9 +69,13 @@ const Table: FC<ITable> = ({ columns, rows, onHandleSortTable, actions, isLoadin
                   rows.map(row => {
                     return (
                       <TableRow key={row.id}>
-                        {isCheckbox && (
+                        {isCheckbox && onHandleMultiSelect && (
                           <TableCell>
-                            <input type="checkbox" />
+                            <input
+                              type="checkbox"
+                              checked={row.checked}
+                              onChange={() => onHandleMultiSelect(row.id)}
+                            />
                           </TableCell>
                         )}
 

@@ -43,7 +43,7 @@ const FormElement: FC<IFormElement> = ({
         return <CustomDatePicker {...commonProps} />;
 
       case 'select':
-        return <CustomSelect {...commonProps} watch={watch} />;
+        return <CustomSelect {...commonProps} watch={watch} setFormValue={setFormValue} />;
 
       case 'autocomplete': {
         return <CustomAutocomplete {...commonProps} setFormValue={setFormValue} watch={watch} />;

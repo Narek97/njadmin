@@ -31,6 +31,7 @@ const AdminTable: FC<AdminTableType> = ({
   const { isSelect, isExport, buttons: leftButton } = actions?.leftButtons || {};
   const { isCreate, buttons: rightButtons } = actions?.rightButtons || {};
 
+  const [tableRows, setTableRows] = useState<Array<AdminTableRowType>>([]);
   const [filtersValue, setFiltersValue] = useState<ObjectKeysType>({});
   const [formInitialData, setFormInitialData] = useState<ObjectKeysType>({});
   const [isSelectAll, setIsSelectAll] = useState<boolean>(false);
@@ -88,6 +89,15 @@ const AdminTable: FC<AdminTableType> = ({
 
   const onHandleSelectAll = () => {
     setIsSelectAll(prev => !prev);
+    setTableRows(prev =>
+      prev.map(row => {
+        row.checked ? setSelectedRowIds([]) : setSelectedRowIds(prev => [...prev, row.id]);
+        return {
+          ...row,
+          checked: !isSelectAll,
+        };
+      }),
+    );
   };
 
   const onHandleExport = () => {};
@@ -120,12 +130,50 @@ const AdminTable: FC<AdminTableType> = ({
     setIsOpenDeleteModal(prev => !prev);
   }, []);
 
+  const onHandleMultiDelete = useCallback(() => {
+    console.log(selectedRowIds, 'selectedRowIds');
+
+    setIsOpenDeleteModal(prev => !prev);
+  }, [selectedRowIds]);
+
+  const onHandleMultiSelect = useCallback(
+    (id: number) => {
+      const isSelectedId = selectedRowIds.some(pid => pid === id);
+      if (isSelectedId) {
+        setTableRows(prev =>
+          prev.map(row => {
+            if (row.id === id) {
+              row.checked = false;
+            }
+            return row;
+          }),
+        );
+        setSelectedRowIds(prev => prev.filter(pid => pid !== id));
+      } else {
+        setTableRows(prev =>
+          prev.map(row => {
+            if (row.id === id) {
+              row.checked = true;
+            }
+            return row;
+          }),
+        );
+        setSelectedRowIds(prev => [...prev, id]);
+      }
+    },
+    [selectedRowIds],
+  );
+
   const onHandleSortTable = useCallback(
     async (sortBy: string, sortType: 'asc' | 'desc') => {
       addMultipleQueryParams({ order: sortType, sort_by: sortBy });
     },
     [addMultipleQueryParams],
   );
+
+  useEffect(() => {
+    setTableRows(rows.map(row => ({ ...row, checked: false })));
+  }, [rows]);
 
   useEffect(() => {
     onHandleCreateInitialFilterValue();
@@ -221,7 +269,9 @@ const AdminTable: FC<AdminTableType> = ({
               {isSelect && (
                 <>
                   <input type="checkbox" onChange={onHandleSelectAll} />
-                  <button>Delete all</button>
+                  <button onClick={onHandleMultiDelete} disabled={!selectedRowIds.length}>
+                    Delete all
+                  </button>
                 </>
               )}
             </div>
@@ -325,14 +375,15 @@ const AdminTable: FC<AdminTableType> = ({
         <div className={'admin-table--table-block'}>
           <Table
             columns={columns}
-            rows={rows}
+            rows={tableRows}
             onHandleSortTable={onHandleSortTable}
+            onHandleMultiSelect={onHandleMultiSelect}
             isLoading={isLoading}
           />
           {rows.length ? (
             <Table
               columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
-              rows={rows}
+              rows={tableRows}
               actions={{ onHandleEdit, onHandleDelete }}
               isLoading={isLoading}
             />

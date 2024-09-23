@@ -57,7 +57,6 @@ const Employees: FC<IEmployees> = ({}) => {
     {
       onSuccess: data => {
         if (data) {
-          console.log(data.models.rows, 'data.models.rows');
           setEmployeesCount(data.models.count);
           setEmployees(data.models.rows);
           setStatuses(data.foreignKeys?.status?.data);
@@ -118,7 +117,7 @@ const Employees: FC<IEmployees> = ({}) => {
   const onHandleConfirmCreate = useCallback(
     async (forms: any) => {
       await createRow(
-        { ...forms, user_id: 26 },
+        { ...forms, user_id: 28 },
         {
           onSuccess: () => {
             mutate();

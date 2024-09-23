@@ -30,10 +30,11 @@ const CustomAutocomplete: FC<ICustomAutocomplete> = ({
 }) => {
   const hasError = errors && errors[input.name];
   const errorMessage = hasError ? (errors[input.name]?.message as string) : '';
+  const valueKey = input.requiredField || 'id';
 
-  const handleChange = ({ id }: { id: number }) => {
+  const handleChange = (item: any) => {
     if (setFormValue) {
-      setFormValue(input.name, id, { shouldValidate: true });
+      setFormValue(input.name, item[valueKey], { shouldValidate: true });
     }
     if (clearErrors) {
       clearErrors(input.name);
@@ -47,7 +48,7 @@ const CustomAutocomplete: FC<ICustomAutocomplete> = ({
           {...input.methods}
           {...(register ? register(input.name, input.validation) : {})}
           sx={input.sx}
-          value={watch ? input.options?.find(op => op.id === watch(input.name)) : ''}
+          value={watch ? input.options?.find(op => op[valueKey] === watch(input.name)) : ''}
           id={input.name} // For accessibility
           {...inputRestParams}
           options={input.options?.slice(0, 100) || []}

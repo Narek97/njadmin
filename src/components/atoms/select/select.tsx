@@ -1,7 +1,13 @@
 'use client';
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material';
 import React, { FC } from 'react';
-import { FieldErrors, UseFormClearErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  FieldErrors,
+  UseFormClearErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
@@ -10,6 +16,7 @@ interface ICustomSelect {
   watch?: UseFormWatch<ObjectKeysType>;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
+  setFormValue?: UseFormSetValue<ObjectKeysType>;
   clearErrors?: UseFormClearErrors<ObjectKeysType>;
 }
 
@@ -18,15 +25,20 @@ const CustomSelect: FC<ICustomSelect> = ({
   errors,
   watch,
   register,
+  setFormValue,
   clearErrors,
   ...inputRestParams
 }) => {
   const hasError = errors && errors[input.name];
   const errorMessage = hasError ? (errors[input.name]?.message as string) : '';
+  const valueKey = input.requiredField || 'id';
 
-  const handleChange = () => {
+  const handleChange = (item: any) => {
     if (clearErrors) {
       clearErrors(input.name);
+    }
+    if (setFormValue) {
+      setFormValue(input.name, item.props.value, { shouldValidate: true });
     }
   };
 
@@ -42,12 +54,14 @@ const CustomSelect: FC<ICustomSelect> = ({
         id={input.name} // For accessibility
         {...inputRestParams}
         defaultValue=""
-        onChange={handleChange}>
+        onChange={(_, newValue) => {
+          handleChange(newValue); // Handle change
+        }}>
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
         {input.options?.map((option, index) => (
-          <MenuItem value={option.id} key={index}>
+          <MenuItem value={option[valueKey]} key={index}>
             {option.name || option.title || ''}
           </MenuItem>
         ))}

@@ -133,6 +133,7 @@ export const formInputs = ({
     attr: {
       label: 'Status',
     },
+    requiredField: 'title',
     useInUpdate: true,
     useInCreation: true,
     options: statuses,
@@ -145,6 +146,7 @@ export const formInputs = ({
     attr: {
       label: 'User type',
     },
+    requiredField: 'title',
     useInUpdate: true,
     useInCreation: true,
     options: userTypes,

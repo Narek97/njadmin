@@ -49,7 +49,7 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     if (createUpdateModalType === CRUDEnum.Create) {
       try {
         setIsLoading(true);
-        await onHandleConfirmCreate(formData);
+        await onHandleConfirmCreate({ ...formData, actionType: 'create', id: 19, user_id: 27 });
         onHandleToggleCreateUpdateModalModal();
       } catch (err) {
         setIsLoading(false);

@@ -12,6 +12,7 @@ export type AdminTableInputType = {
   name: string;
   type: InputTypeEnum;
   label?: string;
+  requiredField?: string;
   icon?: React.ReactNode;
   defaultValue?: string | number | Date | boolean;
   sx?: React.CSSProperties;
@@ -19,7 +20,7 @@ export type AdminTableInputType = {
   attr?: ObjectKeysType;
   methods?: ObjectKeysType;
   validation?: ObjectKeysType;
-  value?: any; //todo
+  value?: any;
   options?: Array<any>;
 };
 
@@ -44,6 +45,7 @@ export type RowType = {
 
 export type AdminTableRowType = {
   id: number;
+  checked: boolean;
   row: Array<RowType>;
 };
 

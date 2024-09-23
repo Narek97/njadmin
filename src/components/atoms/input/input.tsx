@@ -26,7 +26,7 @@ const CustomInput: FC<ICustomInput & TextFieldProps> = ({
   const hasError = errors && errors[input.name];
   const errorMessage = hasError ? (errors[input.name]?.message as string) : '';
 
-  const handleChange = e => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (clearErrors) {
       clearErrors(input.name);
     }

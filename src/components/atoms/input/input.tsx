@@ -3,13 +3,12 @@ import { FormControl, FormHelperText, TextField, TextFieldProps } from '@mui/mat
 import React, { ChangeEvent, FC } from 'react';
 import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
-import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
 interface ICustomInput {
   input: AdminTableInputType;
-  errors?: FieldErrors<ObjectKeysType>;
-  register?: UseFormRegister<ObjectKeysType>;
-  clearErrors?: UseFormClearErrors<ObjectKeysType>;
+  errors?: FieldErrors<any>;
+  register?: UseFormRegister<any>;
+  clearErrors?: UseFormClearErrors<any>;
   value?: string | number;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }

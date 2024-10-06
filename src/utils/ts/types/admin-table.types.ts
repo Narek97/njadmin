@@ -2,13 +2,14 @@ import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
 import React from 'react';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
-export type CreateUpdateType = {
-  useInCreation: boolean;
-  useInUpdate: boolean;
+export type AdminTableRowActionType = {
+  useOnCreate: boolean;
+  useOnUpdate: boolean;
+  useOnPreview?: boolean;
 };
 
 export type AdminTableInputType = {
-  id: number | string;
+  id: string;
   name: string;
   type: InputTypeEnum;
   label?: string;
@@ -25,7 +26,7 @@ export type AdminTableInputType = {
 };
 
 export type AdminTableColumnType = {
-  id: number;
+  id: string;
   key: string;
   name: string;
   align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
@@ -83,7 +84,7 @@ export type AdminTableType = {
   };
 
   createUpdateRow: {
-    formInputs: Array<AdminTableInputType & CreateUpdateType>;
+    formInputs: Array<AdminTableInputType & AdminTableRowActionType>;
     onHandleConfirmCreate: (
       forms: any,
       onSuccess?: () => void,
@@ -95,6 +96,7 @@ export type AdminTableType = {
       onError?: () => void,
     ) => Promise<void>;
   };
+
   deleteRow: {
     onHandleConfirmDelete: (
       ids: number[],
@@ -103,8 +105,7 @@ export type AdminTableType = {
     ) => Promise<void>;
   };
 
-  columns: Array<AdminTableColumnType>;
-  rows: Array<AdminTableRowType>;
+  data: Array<ObjectKeysType>;
 
   isLoading: boolean;
 };

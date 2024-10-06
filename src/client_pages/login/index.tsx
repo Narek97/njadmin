@@ -46,7 +46,7 @@ const LoginPage = () => {
       <form className={`login--form`} onSubmit={handleSubmit(onHandleSubmit)}>
         <CustomInput
           input={{
-            id: 1,
+            id: '1',
             name: 'email',
             type: InputTypeEnum.Text,
             validation: {
@@ -63,7 +63,7 @@ const LoginPage = () => {
 
         <CustomInput
           input={{
-            id: 1,
+            id: '1',
             name: 'password',
             type: InputTypeEnum.Text,
             attr: {

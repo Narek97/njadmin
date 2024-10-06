@@ -1,8 +1,13 @@
 'use client';
 
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import './admin-table.scss';
-import { AdminTableRowType, AdminTableType, RowType } from '@/utils/ts/types/admin-table.types';
+import {
+  AdminTableColumnType,
+  AdminTableRowType,
+  AdminTableType,
+  RowType,
+} from '@/utils/ts/types/admin-table.types';
 import { validateUniqueFilterInputNames } from '@/utils/helpers/global';
 import CustomModal from '@/components/atoms/modal/custom-modal';
 import { IconButton, Menu, MenuItem } from '@mui/material';
@@ -12,6 +17,7 @@ import FilterElement from '@/components/templates/admin-table/filter-element/fil
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
 import Table from '@/components/templates/admin-table/table/table';
 import { useQueryParam } from '@/hooks/useQueryParam';
+import PreviewModalContent from '@/components/templates/admin-table/preview-modal-content/preview-modal-content';
 
 const AdminTable: FC<AdminTableType> = ({
   title,
@@ -19,8 +25,7 @@ const AdminTable: FC<AdminTableType> = ({
   actions,
   createUpdateRow,
   deleteRow,
-  columns,
-  rows,
+  data,
   isLoading,
 }) => {
   const { addNewQueryParam, addMultipleQueryParams, deleteQueryParam, removeQueryParams } =
@@ -31,9 +36,48 @@ const AdminTable: FC<AdminTableType> = ({
   const { isSelect, isExport, buttons: leftButton } = actions?.leftButtons || {};
   const { isCreate, buttons: rightButtons } = actions?.rightButtons || {};
 
+  const columns = useMemo(() => {
+    const arr: AdminTableColumnType[] = [{ id: '1', key: 'checkbox', name: '', align: 'left' }];
+
+    createUpdateRow.formInputs.forEach(input => {
+      if (input.useOnPreview) {
+        arr.push({
+          id: input.id,
+          key: input.name,
+          name: input.attr?.label || input.name,
+          align: 'left',
+          isSortable: true,
+        });
+      }
+    });
+    return arr;
+  }, [createUpdateRow.formInputs]);
+
+  const rows = useMemo(() => {
+    const arr: Array<AdminTableRowType> = [];
+
+    data.forEach(d => {
+      arr.push({
+        id: d.id,
+        checked: false,
+        row: createUpdateRow.formInputs.map(input => {
+          return {
+            key: input.name,
+            value: d[input.name],
+            type: input.type,
+          };
+        }),
+      });
+    });
+
+    return arr;
+  }, [createUpdateRow.formInputs, data]);
+
   const [tableRows, setTableRows] = useState<Array<AdminTableRowType>>([]);
   const [filtersValue, setFiltersValue] = useState<ObjectKeysType>({});
   const [formInitialData, setFormInitialData] = useState<ObjectKeysType>({});
+  const [isOpenPreview, setIsOpenPreview] = useState<boolean>(false);
+  const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
   const [isSelectAll, setIsSelectAll] = useState<boolean>(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState<boolean>(false);
   const [isLoadingDeleteRow, setIsLoadingDeleteRow] = useState<boolean>(false);
@@ -130,11 +174,23 @@ const AdminTable: FC<AdminTableType> = ({
     setIsOpenDeleteModal(prev => !prev);
   }, []);
 
-  const onHandleMultiDelete = useCallback(() => {
-    console.log(selectedRowIds, 'selectedRowIds');
+  const onHandleEditPreviewRow = useCallback(() => {
+    const row = rows.find(r => r.id === selectedRowId);
+    if (row) {
+      setSelectedRowId(null);
+      setIsOpenPreview(false);
+      onHandleEdit(row);
+    }
+  }, [onHandleEdit, rows, selectedRowId]);
 
+  const onHandlePreview = useCallback((id: number) => {
+    setSelectedRowId(id);
+    setIsOpenPreview(prev => !prev);
+  }, []);
+
+  const onHandleMultiDelete = useCallback(() => {
     setIsOpenDeleteModal(prev => !prev);
-  }, [selectedRowIds]);
+  }, []);
 
   const onHandleMultiSelect = useCallback(
     (id: number) => {
@@ -234,6 +290,14 @@ const AdminTable: FC<AdminTableType> = ({
             createUpdateRow={{ ...createUpdateRow, formInitialData }}
             createUpdateModalType={createUpdateModalType}
             onHandleToggleCreateUpdateModalModal={onHandleToggleCreateUpdateModalModal}
+          />
+        </CustomModal>
+      )}
+      {isOpenPreview && (
+        <CustomModal isOpen={isOpenPreview} handleClose={() => setIsOpenPreview(false)}>
+          <PreviewModalContent
+            previewData={data.find(d => d.id === selectedRowId) || {}}
+            onHandleEditPreviewRow={onHandleEditPreviewRow}
           />
         </CustomModal>
       )}
@@ -382,9 +446,9 @@ const AdminTable: FC<AdminTableType> = ({
           />
           {rows.length ? (
             <Table
-              columns={[{ id: 1, key: 'Actions', name: 'Action' }]}
+              columns={[{ id: '1', key: 'Actions', name: 'Action' }]}
               rows={tableRows}
-              actions={{ onHandleEdit, onHandleDelete }}
+              actions={{ onHandleEdit, onHandleDelete, onHandlePreview }}
               isLoading={isLoading}
             />
           ) : null}

@@ -1,7 +1,6 @@
-1. header or {key,value,isSortable,}
-2. custom componnets Array<React.Node>
-3. table row filds,
-   - single multy upload
-   - mettods,(get, popupy bacel ete uzi, hovver, met interfase)
-4. useric vercnel rolery vor haskamnas vor actiony nkarel, (edit,delete)
-
+1. city country datan dzel +
+2. row column nkarel inputic useOnPreview keyov, dzel useOnCreate useOnUpdate +
+3. tabli rownery nkarel yst filderi
+4. useOnUpdate -> false edit jamnak chlini +
+5. useOnPreview -> previw button vory modalov sax tvyalnery cuyc kta, ete lini mejic edit aneneq button clickov +
+6. apin sarqel form datayov

@@ -16,8 +16,9 @@ interface ITable {
   onHandleSortTable?: (sortBy: string, sortType: 'asc' | 'desc') => void;
   onHandleMultiSelect?: (id: number) => void;
   actions?: {
-    onHandleEdit: (row: AdminTableRowType) => void;
-    onHandleDelete: (row: AdminTableRowType) => void;
+    onHandleEdit?: (row: AdminTableRowType) => void;
+    onHandleDelete?: (row: AdminTableRowType) => void;
+    onHandlePreview?: (id: number) => void;
   };
   isLoading: boolean;
 }
@@ -28,7 +29,6 @@ const Table: FC<ITable> = ({
   onHandleSortTable,
   onHandleMultiSelect,
   actions,
-
   isLoading,
 }) => {
   // const user = useRecoilValue(userState);
@@ -93,8 +93,17 @@ const Table: FC<ITable> = ({
                     return (
                       <TableRow key={row.id}>
                         <TableCell>
-                          <button onClick={() => actions.onHandleEdit(row)}>Edit</button>
-                          <button onClick={() => actions?.onHandleDelete(row)}>Delete</button>
+                          {actions.onHandleEdit && (
+                            <button onClick={() => actions.onHandleEdit!(row)}>Edit</button>
+                          )}
+                          {actions.onHandleDelete && (
+                            <button onClick={() => actions.onHandleDelete!(row)}>Delete</button>
+                          )}
+                          {actions.onHandlePreview && (
+                            <button onClick={() => actions.onHandlePreview!(row.id)}>
+                              Preview
+                            </button>
+                          )}
                         </TableCell>
                       </TableRow>
                     );

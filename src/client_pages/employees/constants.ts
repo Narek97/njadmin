@@ -9,12 +9,14 @@ const getMaxBirthDate = (): string => {
 
 export const formInputs = ({
   countries,
+  city,
   codes,
   statuses,
   userTypes,
   locale,
 }: {
   countries: Array<{ id: number; name: string; type: string }>;
+  city: Array<{ id: number; name: string; type: string }>;
   codes: Array<{ id: number; name: string; code: string }>;
   statuses: Array<{ id: number; title: string }>;
   userTypes: Array<{ id: number; title: string }>;
@@ -27,8 +29,9 @@ export const formInputs = ({
     attr: {
       label: 'Name',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: false,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {
       required: 'This field is required',
     },
@@ -40,8 +43,9 @@ export const formInputs = ({
     attr: {
       label: 'Surname',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: false,
+    useOnPreview: false,
     validation: {},
   },
   {
@@ -51,8 +55,9 @@ export const formInputs = ({
     attr: {
       label: 'Country',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     options: countries,
     validation: {},
   },
@@ -63,9 +68,10 @@ export const formInputs = ({
     attr: {
       label: 'City',
     },
-    useInUpdate: true,
-    useInCreation: true,
-    options: countries,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
+    options: city,
     validation: {},
   },
 
@@ -76,8 +82,9 @@ export const formInputs = ({
     attr: {
       label: 'Street',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -87,20 +94,24 @@ export const formInputs = ({
     attr: {
       label: 'Summary',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
     id: uuidv4(),
     name: 'date_of_birth',
     type: InputTypeEnum.Date,
-    attr: {},
+    attr: {
+      label: 'Birth day',
+    },
     inputProps: {
       max: getMaxBirthDate(),
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -110,8 +121,9 @@ export const formInputs = ({
     attr: {
       label: 'Phone',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -121,8 +133,9 @@ export const formInputs = ({
     attr: {
       label: 'Code',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     options: codes,
     validation: {},
   },
@@ -134,8 +147,9 @@ export const formInputs = ({
       label: 'Status',
     },
     requiredField: 'title',
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     options: statuses,
     validation: {},
   },
@@ -147,8 +161,9 @@ export const formInputs = ({
       label: 'User type',
     },
     requiredField: 'title',
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     options: userTypes,
     validation: {},
   },
@@ -159,8 +174,9 @@ export const formInputs = ({
     attr: {
       label: 'Locale',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     options: locale,
     validation: {},
   },
@@ -171,8 +187,9 @@ export const formInputs = ({
     attr: {
       label: 'Driving license',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -182,8 +199,9 @@ export const formInputs = ({
     attr: {
       label: 'Relocate',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -193,8 +211,9 @@ export const formInputs = ({
     attr: {
       label: 'Business trip',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -204,8 +223,9 @@ export const formInputs = ({
     attr: {
       label: 'Private',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
   {
@@ -215,8 +235,9 @@ export const formInputs = ({
     attr: {
       label: 'Prolonged',
     },
-    useInUpdate: true,
-    useInCreation: true,
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
     validation: {},
   },
 ];

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import AdminTable from '@/components/templates/admin-table/admin-table';
 import { useTranslations } from 'next-intl';
 import useSWR from 'swr';
@@ -9,10 +9,9 @@ import { useQueryParam } from '@/hooks/useQueryParam';
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
 import useSWRMutation from 'swr/mutation';
 import { EmployeeType } from '@/utils/ts/types/employee.types';
-import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
 import { formInputs } from '@/client_pages/employees/constants';
 import { useRecoilValue } from 'recoil';
-import { locationState } from '@/store/atoms/location.atom';
+import { cityState, countriesState } from '@/store/atoms/location.atom';
 import { codeState } from '@/store/atoms/code.atom';
 
 interface IEmployees {}
@@ -28,7 +27,8 @@ const Employees: FC<IEmployees> = ({}) => {
   const [userTypes, setUserTypes] = useState<Array<{ id: number; title: string }>>([]);
   const [locale, setLocale] = useState<Array<{ id: number; code: string; title: string }>>([]);
 
-  const countries = useRecoilValue(locationState);
+  const countries = useRecoilValue(countriesState);
+  const city = useRecoilValue(cityState);
   const codes = useRecoilValue(codeState);
 
   let params = `?page=${page}`;
@@ -128,29 +128,6 @@ const Employees: FC<IEmployees> = ({}) => {
     [mutate, createRow],
   );
 
-  const columns = useMemo(() => {
-    const arr: AdminTableColumnType[] = [{ id: 1, key: 'checkbox', name: '', align: 'left' }];
-    if (employees) {
-      let index = 2;
-      for (const property in employees[0]) {
-        arr.push({ id: index, key: property, name: property, align: 'left', isSortable: true });
-        index++;
-      }
-    }
-
-    return arr;
-  }, [employees]);
-
-  const rows: AdminTableRowType[] =
-    useMemo(() => {
-      return employees?.map(employee => ({
-        id: employee.id,
-        row: Object.entries(employee).map(([key, value]) => {
-          return { key, value };
-        }),
-      }));
-    }, [employees]) || [];
-
   return (
     <>
       <AdminTable
@@ -158,7 +135,7 @@ const Employees: FC<IEmployees> = ({}) => {
         filter={{
           filterInputs: [
             {
-              id: 1,
+              id: '1',
               name: 'name',
               value: name || '',
               type: InputTypeEnum.Text,
@@ -182,6 +159,7 @@ const Employees: FC<IEmployees> = ({}) => {
         createUpdateRow={{
           formInputs: formInputs({
             countries,
+            city,
             codes,
             statuses,
             userTypes,
@@ -193,8 +171,7 @@ const Employees: FC<IEmployees> = ({}) => {
         deleteRow={{
           onHandleConfirmDelete,
         }}
-        columns={columns}
-        rows={rows}
+        data={employees || []}
         isLoading={isLoading}
       />
     </>

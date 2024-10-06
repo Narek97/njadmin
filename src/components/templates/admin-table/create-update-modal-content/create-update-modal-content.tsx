@@ -71,6 +71,12 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
     <div className={'create-update-modal-content'}>
       <form className={`create-update-modal-content--form`} onSubmit={handleSubmit(onHandleSubmit)}>
         {formInputs?.map(input => {
+          if (
+            (createUpdateModalType === CRUDEnum.Create && !input.useOnCreate) ||
+            (createUpdateModalType === CRUDEnum.Update && !input.useOnUpdate)
+          ) {
+            return null;
+          }
           return (
             <FormElement
               key={input.id}
@@ -82,27 +88,6 @@ const CreateUpdateModalContent: FC<ICreateUpdateModalContent> = ({
               clearErrors={clearErrors}
             />
           );
-          // return createUpdateModalType === CRUDEnum.Create && input.useInCreation ? (
-          //   <div>
-          //     <FormElement input={input} errors={errors} register={register} key={input.id} />
-          //   </div>
-          // ) : createUpdateModalType === CRUDEnum.Update && input.useInUpdate ? (
-          //   <div key={input.id}>
-          //     <FormElement input={input} errors={errors} register={register} />
-          //
-          //     {/*<TextField*/}
-          //     {/*  {...register(input.name, { ...input.validation })}*/}
-          //     {/*  {...input.attr}*/}
-          //     {/*  {...input.methods}*/}
-          //     {/*  sx={input.sx}*/}
-          //     {/*  error={!!errors.name}*/}
-          //     {/*  helperText={errors[input.name] ? (errors[input.name] as any).message : ''}*/}
-          //     {/*/>*/}
-          //     {/*{errors[input.name] && (*/}
-          //     {/*  <p>{(errors[input.name] as any)?.message || 'This field is required'}</p>*/}
-          //     {/*)}*/}
-          //   </div>
-          // ) : null;
         })}
 
         <input type="submit" disabled={isLoading} />

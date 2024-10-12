@@ -14,6 +14,7 @@ export type AdminTableInputType = {
   type: InputTypeEnum;
   label?: string;
   requiredField?: string;
+  isSortable?: boolean;
   icon?: React.ReactNode;
   defaultValue?: string | number | Date | boolean;
   sx?: React.CSSProperties;

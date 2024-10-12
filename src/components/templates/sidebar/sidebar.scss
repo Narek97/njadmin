@@ -5,9 +5,17 @@
   position: relative;
   min-width: 60px;
   max-width: 60px;
-  transition: 0.3s;
+  transition: 0.3s ease;
 
-  &--list-container {
+  &--open-close-button {
+    @include flex-center-center;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    top: 45px;
+    right: -13px;
+    cursor: pointer;
   }
 
   &--list {
@@ -16,18 +24,14 @@
     overflow-y: auto;
   }
 
-  &--pages-list{
-    height: calc(100dvh - 160px);
-    scrollbar-width: none;
-  }
-
   &--user-list {
+    width: calc(100% - 14px);
     display: flex;
     align-items: center;
     gap: 10px;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid $BASE_GRAY_COLOR;
   }
 
   &--user-avatar-block {
@@ -39,17 +43,30 @@
     border: 1px solid;
     border-radius: 50px;
     overflow: hidden;
+
+    &--user-avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    &--user-avatar-info {
+      display: flex;
+      gap: 10px;
+    }
   }
 
-  &--user-avatar {
-    width: 40px;
-    height: 40px;
+  &--pages-list {
+    height: calc(100dvh - 186px);
+    scrollbar-width: none;
   }
 
-  &--user-avatar-info {
-    display: flex;
-    gap: 10px;
+  &--color-mode-block,
+  &--logout-block{
+    padding-top: 10px;
+    margin: 8px;
+    @include flex-center-center;
   }
+
 
   &--menu-list {
     &--first-block {
@@ -57,7 +74,7 @@
       gap: 20px;
       line-height: 20px;
       padding: 4px;
-      transition: 0.3s;
+      //transition: 0.3s;
       cursor: pointer;
       &:hover {
         background-color: #545e6b;
@@ -97,27 +114,24 @@
     @include reduce-text(100%);
   }
 
-  &--open-close-button {
-    @include flex-center-center;
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50px;
-    background-color: red;
-    top: 50px;
-    right: -15px;
-  }
-
   &--open-sub-menu {
     max-height: 200px;
     overflow: auto;
-    transition: 0.3s;
   }
 
   &--close-sub-menu {
     max-height: 0;
     overflow: hidden;
-    transition: 0.3s;
+  }
+
+  &--logout{
+    all: unset;
+    cursor: pointer;
+    border-radius: 50px;
+    width: 80px;
+    height: 20px;
+    font-size: 10px;
+    text-align: center;
   }
 }
 

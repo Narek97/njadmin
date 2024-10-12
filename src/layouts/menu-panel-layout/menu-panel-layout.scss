@@ -2,6 +2,7 @@
 @import 'src/assets/styles/mixins';
 
 .menu-panel-layout {
+  transition: background-color 0.3s ease;
 
   &--content {
     display: flex;
@@ -10,5 +11,43 @@
 
   &--children {
     flex: 1;
+  }
+}
+
+.light-mode {
+  background-color: $BASE-WHITE-COLOR;
+  .sidebar {
+    color: $BASE-DARK-COLOR2;
+    background-color: $BASE-SLIDER-WHITE-COLOR;
+    &--open-close-button {
+      background-color: $BASE-SLIDER-WHITE-COLOR;
+      border: 1px solid $BASE-SLIDER-DARK-COLOR;
+      svg {
+        fill: $BASE-SLIDER-DARK-COLOR;
+      }
+    }
+    &--logout {
+      color: $BASE-WHITE-COLOR;
+      background-color: #374a58;
+    }
+  }
+}
+
+.dark-mode {
+  background-color: $BASE-DARK-COLOR;
+  .sidebar {
+    color: $BASE-WHITE-COLOR2;
+    background-color: $BASE-SLIDER-DARK-COLOR;
+    &--open-close-button {
+      background-color: $BASE-SLIDER-DARK-COLOR;
+      border: 1px solid $BASE-SLIDER-WHITE-COLOR;
+      svg {
+        fill: $BASE-SLIDER-WHITE-COLOR;
+      }
+    }
+    &--logout {
+      color: $BASE-DARK-COLOR;
+      background-color: #03f803;
+    }
   }
 }

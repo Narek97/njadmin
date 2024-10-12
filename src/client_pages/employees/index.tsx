@@ -13,6 +13,7 @@ import { formInputs } from '@/client_pages/employees/constants';
 import { useRecoilValue } from 'recoil';
 import { cityState, countriesState } from '@/store/atoms/location.atom';
 import { codeState } from '@/store/atoms/code.atom';
+import { createFormData } from '@/utils/helpers/create-form-data';
 
 interface IEmployees {}
 
@@ -103,7 +104,7 @@ const Employees: FC<IEmployees> = ({}) => {
   const onHandleConfirmUpdate = useCallback(
     async (forms: any) => {
       await updateRow(
-        { ...forms, actionType: 'update' },
+        { ...forms },
         {
           onSuccess: () => {
             mutate();
@@ -115,15 +116,12 @@ const Employees: FC<IEmployees> = ({}) => {
   );
 
   const onHandleConfirmCreate = useCallback(
-    async (forms: any) => {
-      await createRow(
-        { ...forms, user_id: 28 },
-        {
-          onSuccess: () => {
-            mutate();
-          },
+    async (form: any) => {
+      await createRow(createFormData({ ...form, user_id: 26 }), {
+        onSuccess: () => {
+          mutate();
         },
-      );
+      });
     },
     [mutate, createRow],
   );

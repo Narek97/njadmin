@@ -14,6 +14,7 @@ import CustomDatePicker from '@/components/atoms/date-picker/date-picker';
 import CustomCheckbox from '@/components/atoms/checkbox/checkbox';
 import CustomAutocomplete from '@/components/atoms/autocomplete/autocomplete';
 import CustomSelect from '@/components/atoms/select/select';
+import FileUploader from '@/components/atoms/file-uploader/file-uploader';
 
 interface IFormElement {
   input: AdminTableInputType;
@@ -33,7 +34,7 @@ const FormElement: FC<IFormElement> = ({
   setFormValue,
 }) => {
   const commonProps = { input, errors, register, clearErrors };
-
+  console.log(errors, 'errors');
   const getInputByType = (): JSX.Element => {
     switch (input.type) {
       case 'number':
@@ -54,6 +55,9 @@ const FormElement: FC<IFormElement> = ({
 
       case 'checkbox':
         return <CustomCheckbox {...commonProps} />;
+
+      case 'file':
+        return <FileUploader {...commonProps} />;
 
       default:
         return <CustomInput {...commonProps} />;

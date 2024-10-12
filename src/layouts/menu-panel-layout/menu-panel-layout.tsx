@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import './menu-panel-layout.scss';
 import { MenuPanelType, UserType } from '@/utils/ts/types/global.types';
-import MenuPanelClientLayout from '@/layouts/menu-panel-layout/menu-panel-client-layout/menu-panel-client-layout';
 import Sidebar from '@/components/templates/sidebar/sidebar';
 import getAdminMenu from '@/api/get-admin-menu';
 import getMe from '@/api/get-me';
@@ -23,15 +22,13 @@ const MenuPanelLayout: FC<IMenuPanelLayout> = async ({ children }) => {
   }
 
   return (
-    <div className={'menu-panel-layout'}>
+    <div className={'menu-panel-layout light-mode'} id={'menu-panel'}>
       {error && false ? (
         <p className={'base-error'}>{error}</p>
       ) : (
         <div className={'menu-panel-layout--content'}>
           <Sidebar menu={menu} user={user} />
-          <div className={'menu-panel-layout--children'}>
-            <MenuPanelClientLayout>{children}</MenuPanelClientLayout>
-          </div>
+          <div className={'menu-panel-layout--children'}>{children}</div>
         </div>
       )}
     </div>

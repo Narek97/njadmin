@@ -49,6 +49,9 @@ const LoginPage = () => {
             id: '1',
             name: 'email',
             type: InputTypeEnum.Text,
+            attr: {
+              autoComplete: 'email',
+            },
             validation: {
               required: 'This field is required',
               pattern: {
@@ -68,6 +71,7 @@ const LoginPage = () => {
             type: InputTypeEnum.Text,
             attr: {
               type: 'password',
+              autoComplete: 'password',
             },
             validation: {
               required: 'This field is required',

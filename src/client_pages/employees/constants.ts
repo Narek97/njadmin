@@ -24,6 +24,20 @@ export const formInputs = ({
 }) => [
   {
     id: uuidv4(),
+    name: 'logo',
+    type: InputTypeEnum.File,
+    attr: {
+      label: 'Logo',
+    },
+    useOnUpdate: true,
+    useOnCreate: true,
+    useOnPreview: true,
+    validation: {
+      required: 'This field is required',
+    },
+  },
+  {
+    id: uuidv4(),
     name: 'name',
     type: InputTypeEnum.Text,
     attr: {
@@ -32,6 +46,7 @@ export const formInputs = ({
     useOnUpdate: false,
     useOnCreate: true,
     useOnPreview: true,
+    isSortable: true,
     validation: {
       required: 'This field is required',
     },
@@ -44,9 +59,11 @@ export const formInputs = ({
       label: 'Surname',
     },
     useOnUpdate: true,
-    useOnCreate: false,
+    useOnCreate: true,
     useOnPreview: false,
-    validation: {},
+    validation: {
+      required: 'This field is required',
+    },
   },
   {
     id: uuidv4(),
@@ -170,6 +187,7 @@ export const formInputs = ({
   {
     id: uuidv4(),
     name: 'locale',
+    requiredField: 'code',
     type: InputTypeEnum.Select,
     attr: {
       label: 'Locale',

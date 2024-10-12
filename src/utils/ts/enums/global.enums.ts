@@ -8,6 +8,7 @@ export enum InputTypeEnum {
   Autocomplete = 'autocomplete',
   Quill = 'quill',
   Array = 'array',
+  File = 'file',
 }
 
 export enum CRUDEnum {

@@ -4,16 +4,17 @@ import './sidebar.scss';
 import Image from 'next/image';
 import PagesIcon from '@mui/icons-material/Pages';
 import PersonIcon from '@mui/icons-material/Person';
-import { Switch, Tooltip } from '@mui/material';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import OpenCloseIcon from '@/public/icons/slider-open-close.svg';
+import { Tooltip } from '@mui/material';
+import { useSetRecoilState } from 'recoil';
 import { useParams, useRouter } from 'next/navigation';
 import useSWRMutation from 'swr/mutation';
 import { MenuPanelType, UserType } from '@/utils/ts/types/global.types';
 import { userState } from '@/store/atoms/user.atom';
-import { colorModeState, isWhiteModeState } from '@/store/atoms/color-mode.atom';
 import { axiosPostFetcher } from '@/utils/helpers/swr';
 import { removeCookies } from '@/utils/helpers/cookies';
 import { accessToken, refreshToken } from '@/utils/constants/global';
+import LightDarkToggle from '@/components/molecules/light-dark-toggle/light-dark-toggle';
 
 interface ISidebar {
   menu: Array<MenuPanelType>;
@@ -24,10 +25,7 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
   const router = useRouter();
 
   const setUser = useSetRecoilState(userState);
-  const colorMode = useRecoilValue(colorModeState);
-  const [isWhiteMode, setIsWhiteMode] = useRecoilState(isWhiteModeState);
-
-  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(true);
 
   const { trigger: signOut } = useSWRMutation(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/logout`,
@@ -42,6 +40,22 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
     },
   );
 
+  const onHandleToggleColorMode = (type: 'light' | 'dark') => {
+    const baseLayout = document.getElementById('menu-panel');
+
+    if (baseLayout) {
+      if (type === 'dark') {
+        // Add 'dark-mode' and remove 'light-mode'
+        baseLayout.classList.add('dark-mode');
+        baseLayout.classList.remove('light-mode');
+      } else {
+        // Add 'light-mode' and remove 'dark-mode'
+        baseLayout.classList.add('light-mode');
+        baseLayout.classList.remove('dark-mode');
+      }
+    }
+  };
+
   const onHandleLogOut = async () => {
     await signOut();
   };
@@ -52,56 +66,48 @@ const Sidebar: FC<ISidebar> = ({ menu, user }) => {
 
   return (
     <>
-      <div
-        className={`sidebar ${isOpenMenu ? 'sidebar--open-menu' : ''}`}
-        style={{
-          backgroundColor: isWhiteMode ? colorMode.white : colorMode.dark,
-          borderRight: `1px solid ${isWhiteMode ? colorMode.dark : colorMode.white}`,
-        }}>
+      <div className={`sidebar ${isOpenMenu ? 'sidebar--open-menu' : ''}`}>
         <button
-          onClick={() => setIsOpenMenu(prev => !prev)}
-          className={'sidebar--open-close-button'}>
-          {`>`}
+          className={'sidebar--open-close-button'}
+          onClick={() => setIsOpenMenu(prev => !prev)}>
+          <OpenCloseIcon />
         </button>
 
-        <div className={'sidebar--list-container'}>
-          <ul className={'sidebar--list'}>
-            <li className={'sidebar--user-list'}>
-              <div className={'sidebar--user-avatar-block'}>
-                {user?.photo ? (
-                  <Image
-                    src={user?.photo || ''}
-                    alt={'Avatar'}
-                    width={150}
-                    height={150}
-                    className={'sidebar--user-avatar'}
-                  />
-                ) : (
-                  <PersonIcon />
-                )}
-              </div>
+        <ul className={'sidebar--list'}>
+          <li className={'sidebar--user-list'}>
+            <div className={'sidebar--user-avatar-block'}>
+              {user?.photo ? (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${user?.photo}`}
+                  alt={'Avatar'}
+                  width={150}
+                  height={150}
+                  className={'sidebar----user-avatar-block--user-avatar'}
+                />
+              ) : (
+                <PersonIcon />
+              )}
+            </div>
 
-              <div className={'sidebar--user-avatar-info'}>
-                <p>{user?.name}</p>
-                <p>{user?.last_name}</p>
-              </div>
-            </li>
-          </ul>
-          <ul className={'sidebar--list sidebar--pages-list'}>
-            {menu.map(m => (
-              <MenuPanelItem menu={m} isOpenMenu={isOpenMenu} key={m.id} />
-            ))}
-          </ul>
-        </div>
+            <div className={'sidebar----user-avatar-block--user-avatar-info'}>
+              <p>{user?.name}</p>
+              <p>{user?.last_name}</p>
+            </div>
+          </li>
+        </ul>
+        <ul className={'sidebar--list sidebar--pages-list'}>
+          {menu.map(m => (
+            <MenuPanelItem menu={m} isOpenMenu={isOpenMenu} key={m.id} />
+          ))}
+        </ul>
 
-        <div>
-          <Switch
-            onChange={() => setIsWhiteMode(prev => !prev)}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
+        <div className={'sidebar--color-mode-block'}>
+          <LightDarkToggle isOpen={isOpenMenu} onHandleToggleColorMode={onHandleToggleColorMode} />
         </div>
-        <div>
-          <button onClick={onHandleLogOut}>Logout</button>
+        <div className={'sidebar--logout-block'}>
+          <button onClick={onHandleLogOut} className={'sidebar--logout'}>
+            Logout
+          </button>
         </div>
       </div>
     </>

@@ -46,7 +46,7 @@ const AdminTable: FC<AdminTableType> = ({
           key: input.name,
           name: input.attr?.label || input.name,
           align: 'left',
-          isSortable: true,
+          isSortable: input.isSortable,
         });
       }
     });

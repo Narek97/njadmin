@@ -15,6 +15,8 @@ import { axiosPostFetcher } from '@/utils/helpers/swr';
 import { removeCookies } from '@/utils/helpers/cookies';
 import { accessToken, refreshToken } from '@/utils/constants/global';
 import LightDarkToggle from '@/components/molecules/light-dark-toggle/light-dark-toggle';
+import PlusIcon from '@/public/icons/plus-button.svg';
+import ArrowIcon from '@/public/icons/arrow-bottom.svg';
 
 interface ISidebar {
   menu: Array<MenuPanelType>;
@@ -146,14 +148,21 @@ const MenuPanelItem = ({ menu, isOpenMenu }: { menu: MenuPanelType; isOpenMenu: 
 
           <p className={'sidebar--menu-title'}>{menu.title}</p>
           {menu.add_button ? (
-            <button className={'sidebar--menu-add-button'}>+</button>
+            <button className={'sidebar--menu-add-button'} onClick={e => e.stopPropagation()}>
+              <PlusIcon />
+            </button>
           ) : (
             <div className={'sidebar--menu-empty-button'} />
           )}
           {menu.subMenu?.length ? (
             <button
               className={'sidebar--menu-sub-menu-button'}
-              onClick={() => setIsOpenSubMenu(prev => !prev)}>{`>`}</button>
+              onClick={e => {
+                e.stopPropagation();
+                setIsOpenSubMenu(prev => !prev);
+              }}>
+              <ArrowIcon />
+            </button>
           ) : (
             <div className={'sidebar--menu-empty-button'} />
           )}

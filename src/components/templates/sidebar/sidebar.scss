@@ -76,9 +76,6 @@
       padding: 4px;
       //transition: 0.3s;
       cursor: pointer;
-      &:hover {
-        background-color: #545e6b;
-      }
     }
     &--second-block {
       padding: 4px 10px;
@@ -93,13 +90,9 @@
   &--menu-add-button,
   &--menu-sub-menu-button {
     @include flex-center-center;
-    min-width: 14px;
-    min-height: 14px;
-    max-width: 14px;
-    max-height: 14px;
-    border: 1px solid;
-    border-radius: 50px;
-    background-color: white;
+    cursor: pointer;
+    border: none;
+    background: transparent;
   }
 
   &--menu-empty-button {

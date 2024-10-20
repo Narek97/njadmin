@@ -19,6 +19,15 @@
   .sidebar {
     color: $BASE-DARK-COLOR2;
     background-color: $BASE-SLIDER-WHITE-COLOR;
+    &--menu-list--first-block {
+      &:hover {
+        background-color: #545e6b;
+        color: $BASE-WHITE-COLOR;
+        svg {
+          fill: $BASE-WHITE-COLOR;
+        }
+      }
+    }
     &--open-close-button {
       background-color: $BASE-SLIDER-WHITE-COLOR;
       border: 1px solid $BASE-SLIDER-DARK-COLOR;
@@ -35,9 +44,21 @@
 
 .dark-mode {
   background-color: $BASE-DARK-COLOR;
+  svg {
+    fill: $BASE-WHITE-COLOR;
+  }
   .sidebar {
     color: $BASE-WHITE-COLOR2;
     background-color: $BASE-SLIDER-DARK-COLOR;
+    &--menu-list--first-block {
+      &:hover {
+        background-color: $BASE-WHITE-COLOR;
+        color: #545e6b;
+        svg {
+          fill: #545e6b;
+        }
+      }
+    }
     &--open-close-button {
       background-color: $BASE-SLIDER-DARK-COLOR;
       border: 1px solid $BASE-SLIDER-WHITE-COLOR;

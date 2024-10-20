@@ -18,16 +18,23 @@ const BaseLayout: FC<IBaseLayout> = ({ children }) => {
   const setCode = useSetRecoilState(codeState);
   const setIndustry = useSetRecoilState(industryState);
 
-  useSWR(`${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/data`, axiosGetFetcher, {
-    onSuccess: data => {
-      if (data) {
-        setCountries(data.country);
-        setCity(data.city);
-        setCode(data.Code);
-        setIndustry(data.Industry);
-      }
+  const { error, isLoading } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin/data`,
+    axiosGetFetcher,
+    {
+      onSuccess: data => {
+        if (data) {
+          setCountries(data.country);
+          setCity(data.city);
+          setCode(data.Code);
+          setIndustry(data.Industry);
+        }
+      },
     },
-  });
+  );
+
+  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return <>{children}</>;
 };

@@ -12,6 +12,7 @@ import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
 interface ICustomAutocomplete {
   input: AdminTableInputType;
+  value?: any;
   errors?: FieldErrors<ObjectKeysType>;
   watch?: UseFormWatch<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
@@ -21,6 +22,7 @@ interface ICustomAutocomplete {
 
 const CustomAutocomplete: FC<ICustomAutocomplete> = ({
   input,
+  value = '',
   errors,
   watch,
   register,
@@ -40,6 +42,7 @@ const CustomAutocomplete: FC<ICustomAutocomplete> = ({
       clearErrors(input.name);
     }
   };
+
   return (
     <>
       <FormControl fullWidth error={!!hasError}>
@@ -48,7 +51,13 @@ const CustomAutocomplete: FC<ICustomAutocomplete> = ({
           {...input.methods}
           {...(register ? register(input.name, input.validation) : {})}
           sx={input.sx}
-          value={watch ? input.options?.find(op => op[valueKey] === watch(input.name)) : ''}
+          value={
+            watch
+              ? input.options?.find(op => op[valueKey] === watch(input.name))
+              : value
+                ? input.options?.find(op => op[valueKey] === +value)
+                : null
+          }
           id={input.name} // For accessibility
           {...inputRestParams}
           options={input.options?.slice(0, 100) || []}

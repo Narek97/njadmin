@@ -53,20 +53,6 @@ export const formInputs = ({
   },
   {
     id: uuidv4(),
-    name: 'last_name',
-    type: InputTypeEnum.Text,
-    attr: {
-      label: 'Surname',
-    },
-    useOnUpdate: true,
-    useOnCreate: true,
-    useOnPreview: false,
-    validation: {
-      required: 'This field is required',
-    },
-  },
-  {
-    id: uuidv4(),
     name: 'country',
     type: InputTypeEnum.Autocomplete,
     attr: {

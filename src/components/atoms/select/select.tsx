@@ -13,6 +13,7 @@ import { ObjectKeysType } from '@/utils/ts/types/global.types';
 
 interface ICustomSelect {
   input: AdminTableInputType;
+  value?: any;
   watch?: UseFormWatch<ObjectKeysType>;
   errors?: FieldErrors<ObjectKeysType>;
   register?: UseFormRegister<ObjectKeysType>;
@@ -22,6 +23,7 @@ interface ICustomSelect {
 
 const CustomSelect: FC<ICustomSelect> = ({
   input,
+  value,
   errors,
   watch,
   register,
@@ -50,7 +52,7 @@ const CustomSelect: FC<ICustomSelect> = ({
         {...input.methods}
         {...(register ? register(input.name, input.validation) : {})}
         sx={input.sx}
-        value={watch ? watch(input.name) : ''}
+        value={watch ? watch(input.name) : (value ?? '')}
         id={input.name} // For accessibility
         {...inputRestParams}
         defaultValue=""

@@ -35,12 +35,24 @@ const Employees: FC<IEmployees> = ({}) => {
   let params = `?page=${page}`;
 
   const name = getQueryParamValue('name');
+  const country = getQueryParamValue('country');
+  const drivingLicense = getQueryParamValue('driving_license');
+  const dateOfBirth = getQueryParamValue('date_of_birth');
   const order = getQueryParamValue('order');
   const sort_by = getQueryParamValue('sort_by');
   const status = getQueryParamValue('status');
 
   if (name) {
     params += `&name=${name}`;
+  }
+  if (country) {
+    params += `&country=${country}`;
+  }
+  if (drivingLicense) {
+    params += `&driving_license=${drivingLicense}`;
+  }
+  if (dateOfBirth) {
+    params += `&date_of_birth=${dateOfBirth}`;
   }
   if (order) {
     params += `&order=${order}`;
@@ -64,6 +76,9 @@ const Employees: FC<IEmployees> = ({}) => {
           setUserTypes(data.foreignKeys?.user_type?.data);
           setLocale(data.foreignKeys?.locale?.data);
         }
+      },
+      onError: () => {
+        console.log('error');
       },
     },
   );
@@ -126,6 +141,10 @@ const Employees: FC<IEmployees> = ({}) => {
     [mutate, createRow],
   );
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <AdminTable
@@ -138,7 +157,35 @@ const Employees: FC<IEmployees> = ({}) => {
               value: name || '',
               type: InputTypeEnum.Text,
               attr: {
-                placeholder: 'Title',
+                label: 'Title',
+              },
+            },
+            {
+              id: '2',
+              name: 'country',
+              type: InputTypeEnum.Select,
+              value: country || '',
+              attr: {
+                label: 'Country',
+              },
+              options: countries,
+            },
+            {
+              id: '3',
+              name: 'date_of_birth',
+              type: InputTypeEnum.Date,
+              value: dateOfBirth || null,
+              attr: {
+                label: 'Date of birth',
+              },
+            },
+            {
+              id: '4',
+              name: 'driving_license',
+              type: InputTypeEnum.Checkbox,
+              value: drivingLicense === 'true',
+              attr: {
+                label: 'Driving license',
               },
             },
           ],

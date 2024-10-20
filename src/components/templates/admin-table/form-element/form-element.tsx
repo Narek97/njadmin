@@ -34,7 +34,7 @@ const FormElement: FC<IFormElement> = ({
   setFormValue,
 }) => {
   const commonProps = { input, errors, register, clearErrors };
-  console.log(errors, 'errors');
+
   const getInputByType = (): JSX.Element => {
     switch (input.type) {
       case 'number':

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import './table.scss';
 import {
   Table as MuiTable,
   Paper,
@@ -9,6 +10,8 @@ import {
   TableRow,
 } from '@mui/material';
 import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
+import TopArrowIcon from '@/public/icons/arrow-top.svg';
+import BottomArrowIcon from '@/public/icons/arrow-bottom.svg';
 
 interface ITable {
   columns: Array<AdminTableColumnType>;
@@ -36,21 +39,32 @@ const Table: FC<ITable> = ({
   const isCheckbox = columns.some(colum => colum.key === 'checkbox');
 
   return (
-    <div style={{ maxWidth: '70dvw' }}>
+    <div style={{ maxWidth: '70dvw' }} className={'table'}>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '20px' }}>
         <TableContainer>
           <MuiTable stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
                 {columns.map(column => (
-                  <TableCell key={column.id} align={column.align || 'center'} style={column.style}>
-                    <span>{column.name}</span>
-                    {onHandleSortTable && column.isSortable && (
-                      <span>
-                        <button onClick={() => onHandleSortTable(column.key, 'asc')}>ASC</button>
-                        <button onClick={() => onHandleSortTable(column.key, 'desc')}>DESC</button>
-                      </span>
-                    )}
+                  <TableCell
+                    className={'table--header-cl'}
+                    key={column.id}
+                    align={column.align || 'center'}
+                    style={column.style}>
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '30px' }}>
+                      <span>{column.name}</span>
+                      {onHandleSortTable && column.isSortable && (
+                        <span className={'table--header-cl--sort-block'}>
+                          <button onClick={() => onHandleSortTable(column.key, 'asc')}>
+                            <TopArrowIcon />
+                          </button>
+                          <button onClick={() => onHandleSortTable(column.key, 'desc')}>
+                            <BottomArrowIcon />
+                          </button>
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                 ))}
               </TableRow>
@@ -68,7 +82,11 @@ const Table: FC<ITable> = ({
                 {!actions &&
                   rows.map(row => {
                     return (
-                      <TableRow key={row.id}>
+                      <TableRow
+                        key={row.id}
+                        sx={{
+                          height: '60px',
+                        }}>
                         {isCheckbox && onHandleMultiSelect && (
                           <TableCell>
                             <input
@@ -92,7 +110,13 @@ const Table: FC<ITable> = ({
                   rows.map(row => {
                     return (
                       <TableRow key={row.id}>
-                        <TableCell>
+                        <TableCell
+                          className={'table--actions-tc'}
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            height: '60px',
+                          }}>
                           {actions.onHandleEdit && (
                             <button onClick={() => actions.onHandleEdit!(row)}>Edit</button>
                           )}

@@ -84,3 +84,24 @@
     margin-right: 14px;
   }
 }
+
+@mixin base-button{
+  min-width: 40px;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  color: $BASE-WHITE-COLOR;
+  background-color: $POSITIVE-COLOR;
+
+}
+
+@mixin base-second-button{
+  min-width: 40px;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  border: 1px solid $POSITIVE-COLOR;
+  color: $POSITIVE-COLOR;
+  background-color: transparent;
+}

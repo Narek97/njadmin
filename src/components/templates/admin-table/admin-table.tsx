@@ -15,9 +15,9 @@ import { CRUDEnum } from '@/utils/ts/enums/global.enums';
 import CreateUpdateModalContent from '@/components/templates/admin-table/create-update-modal-content/create-update-modal-content';
 import FilterElement from '@/components/templates/admin-table/filter-element/filter-element';
 import { ObjectKeysType } from '@/utils/ts/types/global.types';
-import Table from '@/components/templates/admin-table/table/table';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import PreviewModalContent from '@/components/templates/admin-table/preview-modal-content/preview-modal-content';
+import Table from '@/components/templates/admin-table/table/table';
 
 const AdminTable: FC<AdminTableType> = ({
   title,
@@ -28,8 +28,7 @@ const AdminTable: FC<AdminTableType> = ({
   data,
   isLoading,
 }) => {
-  const { addNewQueryParam, addMultipleQueryParams, deleteQueryParam, removeQueryParams } =
-    useQueryParam();
+  const { addMultipleQueryParams, removeQueryParams } = useQueryParam();
 
   const { onHandleConfirmDelete } = deleteRow;
 
@@ -114,22 +113,19 @@ const AdminTable: FC<AdminTableType> = ({
     });
   }, [createUpdateRow.formInputs]);
 
-  const onHandleChangeFilterValue = useCallback((e: any) => {
+  const onHandleChangeFilterValue = useCallback(({ name, value }: { name: string; value: any }) => {
     setFiltersValue((prev: any) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   }, []);
-
   const onHandleSearch = useCallback(() => {
-    for (const property in filtersValue) {
-      if (filtersValue[property]) {
-        addNewQueryParam(property, filtersValue[property]);
-      } else {
-        deleteQueryParam(property);
-      }
-    }
-  }, [addNewQueryParam, deleteQueryParam, filtersValue]);
+    // let cleanedData = Object.fromEntries(
+    //   Object.entries(filtersValue).filter(([key, value]) => value),
+    // );
+
+    addMultipleQueryParams(filtersValue);
+  }, [addMultipleQueryParams, filtersValue]);
 
   const onHandleSelectAll = () => {
     setIsSelectAll(prev => !prev);
@@ -306,39 +302,50 @@ const AdminTable: FC<AdminTableType> = ({
         <div className={'admin-table--filters'}>
           <>
             {filter.filterInputs.map(input => (
-              <React.Fragment key={input.id}>
+              <div key={input.id} className={'admin-table--filters--input-block'}>
                 <FilterElement
                   input={input}
-                  value={filtersValue[input.name] || ''}
+                  value={filtersValue[input.name]}
                   onHandleChange={onHandleChangeFilterValue}
                 />
-              </React.Fragment>
+              </div>
             ))}
           </>
 
-          <button
-            onClick={() => {
-              onHandleCreateInitialFilterValue();
-              removeQueryParams();
-            }}>
-            Clear
-          </button>
-          {filter.isSearchButton && <button onClick={onHandleSearch}>Search</button>}
+          <div className={'admin-table--filters--button-block'}>
+            <button
+              className={'admin-table--filters--clear-button'}
+              onClick={() => {
+                onHandleCreateInitialFilterValue();
+                removeQueryParams();
+              }}>
+              Clear
+            </button>
+
+            {filter.isSearchButton && (
+              <button className={'admin-table--filters--search-button'} onClick={onHandleSearch}>
+                Search
+              </button>
+            )}
+          </div>
         </div>
       ) : null}
       {actions ? (
         <div className={'admin-table--actions'}>
           <div className={'admin-table--actions--left-button'}>
-            <div>
+            <>
               {isSelect && (
                 <>
                   <input type="checkbox" onChange={onHandleSelectAll} />
-                  <button onClick={onHandleMultiDelete} disabled={!selectedRowIds.length}>
+                  <button
+                    onClick={onHandleMultiDelete}
+                    disabled={!selectedRowIds.length}
+                    className={'admin-table--actions--left-button--delete-all'}>
                     Delete all
                   </button>
                 </>
               )}
-            </div>
+            </>
             <div>{isExport && <button onChange={onHandleExport}>Export</button>}</div>
             {leftButton?.slice(0, 3).map(button => (
               <button key={button.id} style={{ ...button.style }} {...button.methods}>

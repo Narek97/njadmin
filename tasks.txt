@@ -1,6 +1,5 @@
-1. city country datan dzel +
-2. row column nkarel inputic useOnPreview keyov, dzel useOnCreate useOnUpdate +
-3. tabli rownery nkarel yst filderi
-4. useOnUpdate -> false edit jamnak chlini +
-5. useOnPreview -> previw button vory modalov sax tvyalnery cuyc kta, ete lini mejic edit aneneq button clickov +
-6. apin sarqel form datayov
+1. nkarnery tabli
+2. asc sesc sorty mi array verev nergev anox
+3. actionnery poxel avelachnel menu 3 ketov bacvox qcel mejy
+4. multi upload multi images files
+5. tabli dashterum avelachnel erkar anunneri hmar ketikner u tooltip mekel action vor petq lini select baci edit anerlu hamar

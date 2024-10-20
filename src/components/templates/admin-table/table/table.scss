@@ -1,0 +1,22 @@
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/mixins';
+
+.table {
+  &--header-cl {
+    &--sort-block {
+      display: flex;
+      flex-direction: column;
+      button{
+        all: unset;
+        height: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+  &--actions-tc {
+    gap: 10px;
+    button {
+      @include base-button;
+    }
+  }
+}

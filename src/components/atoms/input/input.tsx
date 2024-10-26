@@ -4,7 +4,7 @@ import React, { ChangeEvent, FC } from 'react';
 import { FieldErrors, UseFormClearErrors, UseFormRegister } from 'react-hook-form';
 import { AdminTableInputType } from '@/utils/ts/types/admin-table.types';
 
-interface ICustomInput {
+interface IInput {
   input: AdminTableInputType;
   errors?: FieldErrors<any>;
   register?: UseFormRegister<any>;
@@ -13,7 +13,7 @@ interface ICustomInput {
   onChange?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
-const CustomInput: FC<ICustomInput & TextFieldProps> = ({
+const CustomInput: FC<IInput & TextFieldProps> = ({
   input,
   errors,
   register,

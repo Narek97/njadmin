@@ -24,6 +24,7 @@ export type AdminTableInputType = {
   validation?: ObjectKeysType;
   value?: any;
   options?: Array<any>;
+  renderFunction?: (row: RowType) => React.ReactNode;
 };
 
 export type AdminTableColumnType = {
@@ -37,12 +38,13 @@ export type AdminTableColumnType = {
 
 export type RowType = {
   key: string;
-  value: string | number | Date | boolean | null;
+  value: string | number | boolean | null;
   type: InputTypeEnum;
   align?: 'inherit' | 'left' | 'center' | 'right' | 'justify';
   sx?: React.CSSProperties;
   attr?: {};
   methods?: {};
+  renderFunction?: (row: RowType) => React.ReactNode;
 };
 
 export type AdminTableRowType = {
@@ -106,7 +108,7 @@ export type AdminTableType = {
     ) => Promise<void>;
   };
 
-  data: Array<ObjectKeysType>;
+  tableRowItems: Array<ObjectKeysType>;
 
   isLoading: boolean;
 };

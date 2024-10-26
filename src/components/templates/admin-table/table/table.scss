@@ -4,19 +4,24 @@
 .table {
   &--header-cl {
     &--sort-block {
-      display: flex;
-      flex-direction: column;
-      button{
+      @include flex-center;
+      button {
         all: unset;
         height: 20px;
         cursor: pointer;
       }
     }
+    &--asc {
+      transform: rotate(0);
+    }
+    &--desc {
+      transform: rotate(180deg);
+    }
   }
   &--actions-tc {
     gap: 10px;
-    button {
-      @include base-button;
-    }
+  }
+  &--cell {
+    @include reduce-text(200px);
   }
 }

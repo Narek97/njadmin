@@ -1,5 +1,8 @@
+import React from 'react';
+import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
 import { InputTypeEnum } from '@/utils/ts/enums/global.enums';
+import { AdminTableInputType, AdminTableRowActionType } from '@/utils/ts/types/admin-table.types';
 
 const getMaxBirthDate = (): string => {
   const today = new Date();
@@ -21,7 +24,7 @@ export const formInputs = ({
   statuses: Array<{ id: number; title: string }>;
   userTypes: Array<{ id: number; title: string }>;
   locale: Array<{ id: number; code: string; title: string }>;
-}) => [
+}): Array<AdminTableInputType & AdminTableRowActionType> => [
   {
     id: uuidv4(),
     name: 'logo',
@@ -35,6 +38,19 @@ export const formInputs = ({
     validation: {
       required: 'This field is required',
     },
+    renderFunction: row =>
+      row?.value ? (
+        <>
+          <Image
+            src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/${row.value}`}
+            alt={'Logo'}
+            width={150}
+            height={150}
+          />
+        </>
+      ) : (
+        <></>
+      ),
   },
   {
     id: uuidv4(),

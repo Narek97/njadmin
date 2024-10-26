@@ -25,7 +25,7 @@ const AdminTable: FC<AdminTableType> = ({
   actions,
   createUpdateRow,
   deleteRow,
-  data,
+  tableRowItems,
   isLoading,
 }) => {
   const { addMultipleQueryParams, removeQueryParams } = useQueryParam();
@@ -55,22 +55,23 @@ const AdminTable: FC<AdminTableType> = ({
   const rows = useMemo(() => {
     const arr: Array<AdminTableRowType> = [];
 
-    data.forEach(d => {
+    tableRowItems.forEach(item => {
       arr.push({
-        id: d.id,
+        id: item.id,
         checked: false,
         row: createUpdateRow.formInputs.map(input => {
           return {
             key: input.name,
-            value: d[input.name],
+            value: item[input.name],
             type: input.type,
+            renderFunction: input.renderFunction,
           };
         }),
       });
     });
 
     return arr;
-  }, [createUpdateRow.formInputs, data]);
+  }, [createUpdateRow.formInputs, tableRowItems]);
 
   const [tableRows, setTableRows] = useState<Array<AdminTableRowType>>([]);
   const [filtersValue, setFiltersValue] = useState<ObjectKeysType>({});
@@ -119,11 +120,8 @@ const AdminTable: FC<AdminTableType> = ({
       [name]: value,
     }));
   }, []);
-  const onHandleSearch = useCallback(() => {
-    // let cleanedData = Object.fromEntries(
-    //   Object.entries(filtersValue).filter(([key, value]) => value),
-    // );
 
+  const onHandleSearch = useCallback(() => {
     addMultipleQueryParams(filtersValue);
   }, [addMultipleQueryParams, filtersValue]);
 
@@ -179,8 +177,8 @@ const AdminTable: FC<AdminTableType> = ({
     }
   }, [onHandleEdit, rows, selectedRowId]);
 
-  const onHandlePreview = useCallback((id: number) => {
-    setSelectedRowId(id);
+  const onHandlePreview = useCallback((row: AdminTableRowType) => {
+    setSelectedRowId(row.id);
     setIsOpenPreview(prev => !prev);
   }, []);
 
@@ -292,7 +290,7 @@ const AdminTable: FC<AdminTableType> = ({
       {isOpenPreview && (
         <CustomModal isOpen={isOpenPreview} handleClose={() => setIsOpenPreview(false)}>
           <PreviewModalContent
-            previewData={data.find(d => d.id === selectedRowId) || {}}
+            previewData={tableRowItems.find(item => item.id === selectedRowId) || {}}
             onHandleEditPreviewRow={onHandleEditPreviewRow}
           />
         </CustomModal>
@@ -447,6 +445,7 @@ const AdminTable: FC<AdminTableType> = ({
           <Table
             columns={columns}
             rows={tableRows}
+            options={[]}
             onHandleSortTable={onHandleSortTable}
             onHandleMultiSelect={onHandleMultiSelect}
             isLoading={isLoading}
@@ -455,7 +454,11 @@ const AdminTable: FC<AdminTableType> = ({
             <Table
               columns={[{ id: '1', key: 'Actions', name: 'Action' }]}
               rows={tableRows}
-              actions={{ onHandleEdit, onHandleDelete, onHandlePreview }}
+              options={[
+                { option: 'Edit', onCLick: onHandleEdit },
+                { option: 'Delete', onCLick: onHandleDelete },
+                { option: 'Preview', onCLick: onHandlePreview },
+              ]}
               isLoading={isLoading}
             />
           ) : null}

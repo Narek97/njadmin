@@ -1,5 +1,5 @@
-1. nkarnery tabli
+1. nkarnery tabli +
 2. asc sesc sorty mi array verev nergev anox
-3. actionnery poxel avelachnel menu 3 ketov bacvox qcel mejy
+3. actionnery poxel avelachnel menu 3 ketov bacvox qcel mejy +
 4. multi upload multi images files
-5. tabli dashterum avelachnel erkar anunneri hmar ketikner u tooltip mekel action vor petq lini select baci edit anerlu hamar
+5. tabli dashterum avelachnel erkar anunneri hmar ketikner u tooltip mekel action vor petq lini select baci edit anerlu hamar +

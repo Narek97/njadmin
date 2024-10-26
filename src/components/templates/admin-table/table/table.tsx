@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import './table.scss';
 import {
   Table as MuiTable,
@@ -8,21 +8,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from '@mui/material';
 import { AdminTableColumnType, AdminTableRowType } from '@/utils/ts/types/admin-table.types';
 import TopArrowIcon from '@/public/icons/arrow-top.svg';
-import BottomArrowIcon from '@/public/icons/arrow-bottom.svg';
+import LongMenu from '@/components/atoms/menu/menu';
 
 interface ITable {
   columns: Array<AdminTableColumnType>;
   rows: Array<AdminTableRowType>;
   onHandleSortTable?: (sortBy: string, sortType: 'asc' | 'desc') => void;
   onHandleMultiSelect?: (id: number) => void;
-  actions?: {
-    onHandleEdit?: (row: AdminTableRowType) => void;
-    onHandleDelete?: (row: AdminTableRowType) => void;
-    onHandlePreview?: (id: number) => void;
-  };
+  options: { option: any; onCLick: (menuItem: any) => void }[];
   isLoading: boolean;
 }
 
@@ -31,10 +28,11 @@ const Table: FC<ITable> = ({
   rows,
   onHandleSortTable,
   onHandleMultiSelect,
-  actions,
+  options,
   isLoading,
 }) => {
   // const user = useRecoilValue(userState);
+  const [sort, setSort] = useState<'asc' | 'desc'>('asc');
 
   const isCheckbox = columns.some(colum => colum.key === 'checkbox');
 
@@ -55,12 +53,13 @@ const Table: FC<ITable> = ({
                       style={{ display: 'flex', alignItems: 'center', gap: '6px', height: '30px' }}>
                       <span>{column.name}</span>
                       {onHandleSortTable && column.isSortable && (
-                        <span className={'table--header-cl--sort-block'}>
-                          <button onClick={() => onHandleSortTable(column.key, 'asc')}>
+                        <span className={`table--header-cl--sort-block table--header-cl--${sort}`}>
+                          <button
+                            onClick={() => {
+                              setSort(prevSort => (prevSort === 'asc' ? 'desc' : 'asc'));
+                              onHandleSortTable(column.key, sort);
+                            }}>
                             <TopArrowIcon />
-                          </button>
-                          <button onClick={() => onHandleSortTable(column.key, 'desc')}>
-                            <BottomArrowIcon />
                           </button>
                         </span>
                       )}
@@ -79,59 +78,61 @@ const Table: FC<ITable> = ({
               </TableBody>
             ) : (
               <TableBody>
-                {!actions &&
-                  rows.map(row => {
-                    return (
-                      <TableRow
-                        key={row.id}
-                        sx={{
-                          height: '60px',
-                        }}>
-                        {isCheckbox && onHandleMultiSelect && (
-                          <TableCell>
-                            <input
-                              type="checkbox"
-                              checked={row.checked}
-                              onChange={() => onHandleMultiSelect(row.id)}
-                            />
-                          </TableCell>
-                        )}
-
-                        {row.row.map(rowItem => (
-                          <TableCell key={rowItem.key} sx={rowItem.sx} {...rowItem.methods}>
-                            {rowItem.value}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
-
-                {actions &&
-                  rows.map(row => {
-                    return (
-                      <TableRow key={row.id}>
-                        <TableCell
-                          className={'table--actions-tc'}
+                {!options.length
+                  ? rows.map(row => {
+                      return (
+                        <TableRow
+                          key={row.id}
                           sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
                             height: '60px',
                           }}>
-                          {actions.onHandleEdit && (
-                            <button onClick={() => actions.onHandleEdit!(row)}>Edit</button>
+                          {isCheckbox && onHandleMultiSelect && (
+                            <TableCell>
+                              <input
+                                type="checkbox"
+                                checked={row.checked}
+                                onChange={() => onHandleMultiSelect(row.id)}
+                              />
+                            </TableCell>
                           )}
-                          {actions.onHandleDelete && (
-                            <button onClick={() => actions.onHandleDelete!(row)}>Delete</button>
-                          )}
-                          {actions.onHandlePreview && (
-                            <button onClick={() => actions.onHandlePreview!(row.id)}>
-                              Preview
-                            </button>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+
+                          {row.row.map(rowItem => (
+                            <TableCell
+                              key={rowItem.key}
+                              sx={rowItem.sx}
+                              {...rowItem.methods}
+                              className={'table--cell'}>
+                              {rowItem.renderFunction ? (
+                                rowItem.renderFunction(rowItem)
+                              ) : (
+                                <Tooltip title={rowItem.value}>
+                                  <span>{rowItem.value}</span>
+                                </Tooltip>
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      );
+                    })
+                  : null}
+
+                {options.length
+                  ? rows.map(row => {
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell
+                            className={'table--actions-tc'}
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              height: '60px',
+                            }}>
+                            <LongMenu menuItem={row} options={options} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  : null}
               </TableBody>
             )}
           </MuiTable>

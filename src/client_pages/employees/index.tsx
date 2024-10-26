@@ -216,7 +216,7 @@ const Employees: FC<IEmployees> = ({}) => {
         deleteRow={{
           onHandleConfirmDelete,
         }}
-        data={employees || []}
+        tableRowItems={employees || []}
         isLoading={isLoading}
       />
     </>
